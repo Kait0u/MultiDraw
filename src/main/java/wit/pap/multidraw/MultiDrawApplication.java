@@ -8,6 +8,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,6 +19,8 @@ public class MultiDrawApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         Button btnPause, btnSave, btnClear, btnConnect;
         TextField tfHost, tfRoom;
+        ColorPicker colorPicker;
+
         VBox root = new VBox();
         Scene scene = new Scene(root);
 
@@ -24,6 +28,7 @@ public class MultiDrawApplication extends Application {
                 btnPause = new Button("Pause"),
                 btnSave = new Button("Save"),
                 new Separator(Orientation.VERTICAL),
+                colorPicker = new ColorPicker(Color.BLACK),
                 btnClear = new Button("Clear"),
                 new Separator(Orientation.VERTICAL),
                 new Label("Host: "),
@@ -35,12 +40,12 @@ public class MultiDrawApplication extends Application {
         );
         root.getChildren().add(toolBar);
 
-
         Canvas canvas = new Canvas(1920, 1080);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
+            gc.setStroke(colorPicker.valueProperty().getValue());
             gc.beginPath();
             gc.moveTo(e.getX(), e.getY());
             gc.stroke();
