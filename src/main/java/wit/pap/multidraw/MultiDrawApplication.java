@@ -1,12 +1,16 @@
 package wit.pap.multidraw;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -15,45 +19,73 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MultiDrawApplication extends Application {
+    Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
+    TextField tfHost, tfRoom;
+    Spinner<Integer> spnPenSize;
+    ColorPicker colorPicker;
+    Canvas canvas;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Button btnPause, btnSave, btnClear, btnConnect;
-        TextField tfHost, tfRoom;
-        ColorPicker colorPicker;
-
         VBox root = new VBox();
         Scene scene = new Scene(root);
 
         ToolBar toolBar = new ToolBar(
-                btnPause = new Button("Pause"),
+                btnPauseResume = new Button("Pause"),
                 btnSave = new Button("Save"),
                 new Separator(Orientation.VERTICAL),
                 colorPicker = new ColorPicker(Color.BLACK),
+                new Pane(),
+
+                new Label("Pen Size: "),
+                spnPenSize = new Spinner<Integer>() {{
+                    setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                            1, 50, 1
+                    ));
+                    setPrefWidth(80);
+                }},
+                new Pane(),
                 btnClear = new Button("Clear"),
                 new Separator(Orientation.VERTICAL),
                 new Label("Host: "),
                 tfHost = new TextField(),
                 new Label("Room ID: "),
                 tfRoom = new TextField(),
-                btnConnect = new Button("Connect")
+                btnConnectDisconnect = new Button("Connect")
 
         );
         root.getChildren().add(toolBar);
 
-        Canvas canvas = new Canvas(1920, 1080);
+        canvas = new Canvas(1920, 1080);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
-            gc.setStroke(colorPicker.valueProperty().getValue());
-            gc.beginPath();
-            gc.moveTo(e.getX(), e.getY());
-            gc.stroke();
+            if (e.getButton().equals(MouseButton.PRIMARY)) {
+                gc.setStroke(colorPicker.valueProperty().getValue());
+                gc.setLineWidth(spnPenSize.getValue());
+                gc.beginPath();
+                gc.moveTo(e.getX(), e.getY());
+                gc.stroke();
+            } else if (e.getButton().equals(MouseButton.SECONDARY)) {
+                clearCanvasPoint(e.getX(), e.getY());
+            }
         });
 
         canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
-            gc.lineTo(e.getX(), e.getY());
-            gc.stroke();
+            if (e.getButton().equals(MouseButton.PRIMARY)) {
+                gc.lineTo(e.getX(), e.getY());
+                gc.stroke();
+            } else if (e.getButton().equals(MouseButton.SECONDARY)) {
+                clearCanvasPoint(e.getX(), e.getY());
+            }
+        });
+
+        btnClear.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                clearCanvas();
+            }
         });
 
 
@@ -69,6 +101,18 @@ public class MultiDrawApplication extends Application {
         primaryStage.setWidth(1280);
         primaryStage.setHeight(768);
         primaryStage.show();
+    }
+
+    private void clearCanvas() {
+        if (canvas != null) {
+            canvas.getGraphicsContext2D().clearRect(0,  0, canvas.getWidth(), canvas.getHeight());
+        }
+    }
+
+    private void clearCanvasPoint(double x, double y) {
+        int size = spnPenSize.getValue();
+        int halfSize = size / 2;
+        canvas.getGraphicsContext2D().clearRect(x - halfSize, y - halfSize, size, size);
     }
 
     public static void main(String[] args) {
