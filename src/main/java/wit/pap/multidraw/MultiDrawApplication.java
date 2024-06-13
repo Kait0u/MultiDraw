@@ -15,21 +15,22 @@ import java.io.IOException;
 public class MultiDrawApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        Button btnPause, btnSave, btnClear, btnConnect;
+        TextField tfHost, tfRoom;
         VBox root = new VBox();
         Scene scene = new Scene(root);
 
         ToolBar toolBar = new ToolBar(
-                new Button("Pause"),
-                new Button("Save"),
+                btnPause = new Button("Pause"),
+                btnSave = new Button("Save"),
                 new Separator(Orientation.VERTICAL),
-                new Button("Clear"),
+                btnClear = new Button("Clear"),
                 new Separator(Orientation.VERTICAL),
                 new Label("Host: "),
-                new TextField(),
+                tfHost = new TextField(),
                 new Label("Room ID: "),
-                new TextField(),
-                new Button("Connect")
+                tfRoom = new TextField(),
+                btnConnect = new Button("Connect")
 
         );
         root.getChildren().add(toolBar);
