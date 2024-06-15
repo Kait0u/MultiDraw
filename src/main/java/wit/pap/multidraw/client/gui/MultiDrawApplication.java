@@ -13,10 +13,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
+
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.globals.Globals;
 
@@ -98,10 +98,10 @@ public class MultiDrawApplication extends Application {
 
         primaryStage.setTitle("MultiDraw");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(512);
-        primaryStage.setMinWidth(512);
-        primaryStage.setWidth(1280);
-        primaryStage.setHeight(768);
+        primaryStage.setMinHeight(Globals.WINDOW_MIN_DIM);
+        primaryStage.setMinWidth(Globals.WINDOW_MIN_DIM);
+        primaryStage.setWidth(Globals.WINDOW_INITIAL_WIDTH);
+        primaryStage.setHeight(Globals.WINDOW_INITIAL_HEIGHT);
         primaryStage.show();
     }
 
