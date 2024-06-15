@@ -1,4 +1,4 @@
-package wit.pap.multidraw;
+package wit.pap.multidraw.client;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -14,7 +14,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
+import wit.pap.multidraw.globals.Globals;
 
 import java.io.IOException;
 
@@ -56,9 +59,12 @@ public class MultiDrawApplication extends Application {
         );
         root.getChildren().add(toolBar);
 
-        canvas = new Canvas(1920, 1080);
+        canvas = new Canvas(Globals.IMAGE_WIDTH, Globals.IMAGE_HEIGHT);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setImageSmoothing(true);
+        gc.setLineCap(StrokeLineCap.ROUND);
+        gc.setLineJoin(StrokeLineJoin.ROUND);
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
@@ -93,6 +99,38 @@ public class MultiDrawApplication extends Application {
         scrollPane.setContent(canvas);
         root.getChildren().add(scrollPane);
 
+//        scrollPane.setPannable(true);
+//        scrollPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+//            if (event.getButton() == MouseButton.MIDDLE) {
+////                initialX = event.getX();
+////                initialY = event.getY();
+//                event.consume();
+//            }
+//        });
+//
+////        scrollPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+////            if (event.getButton() == MouseButton.MIDDLE) {
+////                double deltaX =  - event.getX();
+////                double deltaY = event.getY();
+////
+////                scrollPane.setHvalue(scrollPane.getHvalue() + deltaX / scrollPane.getContent().getBoundsInLocal().getWidth());
+////                scrollPane.setVvalue(scrollPane.getVvalue() + deltaY / scrollPane.getContent().getBoundsInLocal().getHeight());
+////
+////                initialX = event.getX();
+////                initialY = event.getY();
+////                event.consume();
+////            }
+////        });
+//
+//        scrollPane.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
+//            if (event.getButton() == MouseButton.MIDDLE) {
+//                event.consume();
+//            }
+//        });
+
+
+
+
 
         primaryStage.setTitle("MultiDraw");
         primaryStage.setScene(scene);
@@ -113,9 +151,5 @@ public class MultiDrawApplication extends Application {
         int size = spnPenSize.getValue();
         int halfSize = size / 2;
         canvas.getGraphicsContext2D().clearRect(x - halfSize, y - halfSize, size, size);
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
