@@ -50,7 +50,7 @@ public class MultiDrawApplication extends Application {
                 new Label("Pen Size: "),
                 spnPenSize = new Spinner<Integer>() {{
                     setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                            1, 50, 1
+                            1, 50, 5
                     ));
                     setPrefWidth(80);
                 }},
