@@ -1,4 +1,4 @@
-package wit.pap.multidraw.client;
+package wit.pap.multidraw.client.gui;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
