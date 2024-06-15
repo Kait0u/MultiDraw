@@ -88,12 +88,7 @@ public class MultiDrawApplication extends Application {
             }
         });
 
-        btnClear.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
-                clearCanvas();
-            }
-        });
+        btnClear.setOnAction(event -> clearCanvas());
 
 
         PannableScrollPane scrollPane = new PannableScrollPane();
