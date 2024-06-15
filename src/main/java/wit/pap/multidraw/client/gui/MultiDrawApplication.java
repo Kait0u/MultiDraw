@@ -17,6 +17,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
+import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.globals.Globals;
 
 import java.io.IOException;
@@ -95,41 +96,9 @@ public class MultiDrawApplication extends Application {
         });
 
 
-        ScrollPane scrollPane = new ScrollPane();
+        PannableScrollPane scrollPane = new PannableScrollPane();
         scrollPane.setContent(canvas);
         root.getChildren().add(scrollPane);
-
-//        scrollPane.setPannable(true);
-//        scrollPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-//            if (event.getButton() == MouseButton.MIDDLE) {
-////                initialX = event.getX();
-////                initialY = event.getY();
-//                event.consume();
-//            }
-//        });
-//
-////        scrollPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-////            if (event.getButton() == MouseButton.MIDDLE) {
-////                double deltaX =  - event.getX();
-////                double deltaY = event.getY();
-////
-////                scrollPane.setHvalue(scrollPane.getHvalue() + deltaX / scrollPane.getContent().getBoundsInLocal().getWidth());
-////                scrollPane.setVvalue(scrollPane.getVvalue() + deltaY / scrollPane.getContent().getBoundsInLocal().getHeight());
-////
-////                initialX = event.getX();
-////                initialY = event.getY();
-////                event.consume();
-////            }
-////        });
-//
-//        scrollPane.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
-//            if (event.getButton() == MouseButton.MIDDLE) {
-//                event.consume();
-//            }
-//        });
-
-
-
 
 
         primaryStage.setTitle("MultiDraw");
