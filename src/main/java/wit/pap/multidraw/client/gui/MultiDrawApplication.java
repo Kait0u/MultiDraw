@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -17,8 +18,10 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
 
+import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.globals.Globals;
+import wit.pap.multidraw.shared.LayeredImage;
 
 import java.io.IOException;
 
@@ -27,7 +30,10 @@ public class MultiDrawApplication extends Application {
     TextField tfHost, tfRoom;
     Spinner<Integer> spnPenSize;
     ColorPicker colorPicker;
+
+    LayeredImageStack imageStack;
     Canvas canvas;
+    ImageView bgImageView, mgImageView;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -35,7 +41,7 @@ public class MultiDrawApplication extends Application {
         Scene scene = new Scene(root);
 
         ToolBar toolBar = new ToolBar(
-                btnPauseResume = new Button("Pause"),
+//                btnPauseResume = new Button("Pause"),
                 btnSave = new Button("Save"),
                 new Separator(Orientation.VERTICAL),
                 colorPicker = new ColorPicker(Color.BLACK),
@@ -60,7 +66,9 @@ public class MultiDrawApplication extends Application {
         );
         root.getChildren().add(toolBar);
 
-        canvas = new Canvas(Globals.IMAGE_WIDTH, Globals.IMAGE_HEIGHT);
+        imageStack = new LayeredImageStack(new LayeredImage());
+
+        canvas = imageStack.getFgCanvas();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setImageSmoothing(true);
@@ -92,7 +100,7 @@ public class MultiDrawApplication extends Application {
 
 
         PannableScrollPane scrollPane = new PannableScrollPane();
-        scrollPane.setContent(canvas);
+        scrollPane.setContent(imageStack);
         root.getChildren().add(scrollPane);
 
 
