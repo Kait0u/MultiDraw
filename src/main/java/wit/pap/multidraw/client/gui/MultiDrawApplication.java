@@ -28,7 +28,7 @@ import java.io.IOException;
 
 public class MultiDrawApplication extends Application {
     Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
-    TextField tfHost, tfRoom;
+    TextField tfHost, tfHostPort, tfRoom;
     Spinner<Integer> spnPenSize;
     ColorPicker colorPicker;
 
@@ -61,6 +61,8 @@ public class MultiDrawApplication extends Application {
                 new Separator(Orientation.VERTICAL),
                 new Label("Host: "),
                 tfHost = new TextField(),
+                new Label("Port: "),
+                tfHostPort = new TextField(),
                 new Label("Room ID: "),
                 tfRoom = new TextField(),
                 btnConnectDisconnect = new Button("Connect")
