@@ -1,13 +1,12 @@
 package wit.pap.multidraw.client.gui;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -21,8 +20,10 @@ import javafx.stage.Stage;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.globals.Globals;
+import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.LayeredImage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MultiDrawApplication extends Application {
@@ -31,6 +32,7 @@ public class MultiDrawApplication extends Application {
     Spinner<Integer> spnPenSize;
     ColorPicker colorPicker;
 
+    LayeredImage layeredImage;
     LayeredImageStack imageStack;
     Canvas canvas;
     ImageView bgImageView, mgImageView;
@@ -66,7 +68,8 @@ public class MultiDrawApplication extends Application {
         );
         root.getChildren().add(toolBar);
 
-        imageStack = new LayeredImageStack(new LayeredImage());
+        layeredImage = new LayeredImage();
+        imageStack = new LayeredImageStack(layeredImage);
 
         canvas = imageStack.getFgCanvas();
 

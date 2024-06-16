@@ -1,9 +1,6 @@
 package wit.pap.multidraw.shared;
 
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.*;
 import wit.pap.multidraw.globals.Globals;
 
 import java.util.Arrays;
@@ -13,6 +10,11 @@ public class BgraImage {
     int width, height;
 
     private BgraImage(int length, int w, int h) {
+        if (length != w * h * Globals.BGRA_CHANNELS)
+            throw new IllegalArgumentException(
+                    "The length parameter needs to equal width * height * the number of RGBA channels!"
+            );
+
         imageArr = new byte[length];
         Arrays.fill(imageArr, (byte) Globals.MIN_PIXEL);
 
@@ -25,7 +27,7 @@ public class BgraImage {
     }
 
     public BgraImage(int w, int h) {
-        this(w * h, w, h);
+        this(w * h * Globals.BGRA_CHANNELS, w, h);
     }
 
     private BgraImage(byte[] arr, int w, int h) {
@@ -87,7 +89,7 @@ public class BgraImage {
         return image;
     }
 
-    public static BgraImage fromWritableImage(WritableImage img) {
+    public static BgraImage fromFXImage(Image img) {
         int width = (int) img.getWidth();
         int height = (int) img.getHeight();
 
@@ -95,10 +97,10 @@ public class BgraImage {
         byte[] byteArray = result.getImageArr();
 
         PixelReader pixelReader = img.getPixelReader();
-        int index = 0;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0, index = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
                 int argb = pixelReader.getArgb(x, y);
+                System.out.println(Integer.toString(index)+ " " + Integer.toString(argb));
                 byteArray[index++] = (byte) (argb & 0xFF);         // Blue
                 byteArray[index++] = (byte) ((argb >> 8) & 0xFF);  // Green
                 byteArray[index++] = (byte) ((argb >> 16) & 0xFF); // Red
