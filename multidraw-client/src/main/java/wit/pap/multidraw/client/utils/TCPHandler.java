@@ -1,5 +1,7 @@
 package wit.pap.multidraw.client.utils;
 
+import wit.pap.multidraw.shared.communication.ClientCommands;
+import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.Message;
 
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TCPHandler extends Thread {
     private Socket socket;
@@ -16,7 +19,7 @@ public class TCPHandler extends Thread {
     private ObjectInputStream inputStream;
 
     private final Queue<Message> messagesToSend;
-    private boolean running;
+    private AtomicBoolean running;
 
     public TCPHandler(String serverAddress, int serverPort) throws IOException {
         this(InetAddress.getByName(serverAddress), serverPort);
@@ -28,17 +31,16 @@ public class TCPHandler extends Thread {
         this.inputStream = new ObjectInputStream(socket.getInputStream());
 
         this.messagesToSend = new ConcurrentLinkedQueue<>();
-        this.running = false;
+        this.running = new AtomicBoolean(false);
     }
 
     @Override
     public void run() {
         System.out.println("TCPHandler started!");
-        this.running = true;
+        this.running.set(true);
         try {
-            while (running) {
+            while (this.running.get()) {
                 sendMessages();
-//                wait();
             }
         } finally {
             close();
@@ -74,16 +76,21 @@ public class TCPHandler extends Thread {
         // You can process the message further here
     }
 
-    public void stopHandler() {
-        running = false;
+    public synchronized void stopHandler() {
+        this.running.set(false);
         interrupt();
         close();
     }
 
     private void close() {
         try {
-            if (outputStream != null) outputStream.close();
-            if (inputStream != null) inputStream.close();
+            if (outputStream != null) {
+                ClientMessage msg = new ClientMessage(ClientCommands.DISCONNECT, null);
+                outputStream.close();
+            }
+
+            if (inputStream != null)
+                inputStream.close();
             if (socket != null) socket.close();
         } catch (IOException e) {
             e.printStackTrace();

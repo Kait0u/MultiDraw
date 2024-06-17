@@ -163,6 +163,11 @@ public class MultiDrawApplication extends Application {
         }
     }
 
+    private void disconnect() {
+        tcpHandler.stopHandler();
+        tcpHandler = null;
+    }
+
     // ---------
 
 
