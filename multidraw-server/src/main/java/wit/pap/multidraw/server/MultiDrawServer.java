@@ -11,10 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MultiDrawServer {
@@ -25,7 +22,8 @@ public class MultiDrawServer {
     private boolean isRunning = false;
 
     private Set<User> users;
-    private Set<Room> rooms;
+    private final Set<Room> rooms;
+    private final Map<String, Room> nameRoomMap;
     private Queue<Socket> toBeUsers;
 
     public MultiDrawServer(int port) {
@@ -36,6 +34,7 @@ public class MultiDrawServer {
             throw new RuntimeException(e);
         }
         this.rooms = new HashSet<>();
+        this.nameRoomMap = new HashMap<>();
         this.users = new HashSet<>();
         this.toBeUsers = new ConcurrentLinkedQueue<>();
     }
@@ -80,16 +79,19 @@ public class MultiDrawServer {
                     }
                 }
 
-                final String finalRoomName = roomName;
                 Room room = null;
-                synchronized (rooms) {
-                    room = rooms.stream().filter(r -> r.getName().equals(finalRoomName)).findFirst().orElse(null);
+                synchronized (nameRoomMap) {
+                    room = nameRoomMap.getOrDefault(roomName, null);
                 }
 
                 if (room == null) {
                     room = new Room(roomName);
+
                     synchronized (rooms) {
                         rooms.add(room);
+                    }
+                    synchronized (nameRoomMap) {
+                        nameRoomMap.put(roomName, room);
                     }
                 }
 
