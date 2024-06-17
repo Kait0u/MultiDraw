@@ -4,11 +4,54 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Made first successful attempt at communication between the client and the server.">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/gui/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/gui/icon_big.png" afterDir="false" />
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Icons added.">
+      <change afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/widgets/PannableScrollPane.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/resources/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/resources/icon_big.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/test/java/wit/pap/AppTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/resources/log4j2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-server/src/test/java/wit/pap/AppTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/BgraImage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/LayeredImage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/ClientCommands.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/test/java/wit/pap/AppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Both.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/PannableScrollPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/gui/widgets/PannableScrollPane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/ClientCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/globals/ClientCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/BgraImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/BgraImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/LayeredImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/LayeredImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/gui/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/resources/gui/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/gui/icon_big.png" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/resources/gui/icon_big.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +63,7 @@
       <list>
         <option value="Enum" />
         <option value="Class" />
+        <option value="module-info" />
       </list>
     </option>
   </component>
@@ -52,48 +96,70 @@
     "Application.Main.executor": "Run",
     "Application.MultiDrawApplication.executor": "Run",
     "Application.Server Main.executor": "Run",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
+    "jdk.selected.JAVA_MODULE": "21",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/jjaws/IdeaProjects/multidraw/src/main/resources/gui",
+    "last_opened_file_path": "C:/Users/jjaws/IdeaProjects/multidraw/multidraw-client/src/main/java/wit/pap/multidraw/client",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "vcs.Git",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\src\main\resources\gui" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-client\src\main\java\wit\pap\multidraw\client" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-client\src\main\resources" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-shared\src\main\java\wit\pap" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-server\src\main\java\wit\pap" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-client\src\main\java\wit\pap" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-server\src\main\resources" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-server" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-client" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-client\src\main\java" />
+      <recent name="C:\Users\jjaws\IdeaProjects\multidraw\src\main\java\wit\pap\multidraw\shared" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="wit.pap.multidraw" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.Both">
+  <component name="RunManager" selected="Compound.B O T H">
     <configuration name="Client Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="wit.pap.multidraw.client.Main" />
-      <module name="multidraw" />
+      <module name="multidraw-client" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Server Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="wit.pap.multidraw.server.Main" />
-      <module name="multidraw" />
+      <module name="multidraw-server" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="B O T H" type="CompoundRunConfigurationType">
+      <toRun name="Client Main" type="Application" />
+      <toRun name="Server Main" type="Application" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.Client Main" />
       <item itemvalue="Application.Server Main" />
-      <item itemvalue="Compound.Both" />
+      <item itemvalue="Compound.B O T H" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -115,7 +181,8 @@
       <workItem from="1718393598330" duration="4884000" />
       <workItem from="1718477756682" duration="2468000" />
       <workItem from="1718480235769" duration="12531000" />
-      <workItem from="1718557003081" duration="20194000" />
+      <workItem from="1718557003081" duration="21053000" />
+      <workItem from="1718615516154" duration="6251000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -285,7 +352,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718584206438</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Icons added.">
+      <option name="closed" value="true" />
+      <created>1718584639472</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1718584639472</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -324,7 +399,8 @@
     <MESSAGE value="Added a port field." />
     <MESSAGE value="Added a Message class." />
     <MESSAGE value="Made first successful attempt at communication between the client and the server." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made first successful attempt at communication between the client and the server." />
+    <MESSAGE value="Icons added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Icons added." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
