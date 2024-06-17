@@ -68,7 +68,9 @@ public class MultiDrawApplication extends Application {
                 new Label("Host: "),
                 tfHost = new TextField(),
                 new Label("Port: "),
-                tfHostPort = new TextField(),
+                tfHostPort = new TextField() {{
+                    setPrefWidth(80);
+                }},
                 new Label("Nickname: "),
                 tfNickname = new TextField(),
                 new Label("Room ID: "),

@@ -3,7 +3,9 @@ package wit.pap.multidraw.shared;
 import javafx.scene.image.*;
 import wit.pap.multidraw.shared.globals.Globals;
 
+import java.security.InvalidParameterException;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class BgraImage {
     private byte[] imageArr;
@@ -111,13 +113,75 @@ public class BgraImage {
         return result;
     }
 
+    public static BgraImage overlay(BgraImage bottom, BgraImage top) {
+        if (bottom == null || top == null)
+            throw new IllegalArgumentException("Images cannot be null!");
+
+        byte[] bottomBytes = bottom.getImageArr();
+        byte[] topBytes = top.getImageArr();
+        byte[] resultBytes = new byte[topBytes.length];
+
+        IntStream.range(0, resultBytes.length).parallel()
+                .filter(idx -> idx % Globals.BGRA_CHANNELS == 0)
+                .forEach(idx -> {
+                    int bBottom = bottomBytes[idx] & 0xFF;
+                    int gBottom = bottomBytes[idx + 1] & 0xFF;
+                    int rBottom = bottomBytes[idx + 2] & 0xFF;
+                    int aBottom = bottomBytes[idx + 3] & 0xFF;
+
+                    int bTop = topBytes[idx] & 0xFF;
+                    int gTop = topBytes[idx + 1] & 0xFF;
+                    int rTop = topBytes[idx + 2] & 0xFF;
+                    int aTop = topBytes[idx + 3] & 0xFF;
+
+                    float alpha = aTop / (float) Globals.MAX_PIXEL;
+
+                    int bResult = (int) (bTop * alpha + bBottom * (1 - alpha));
+                    int gResult = (int) (gTop * alpha + gBottom * (1 - alpha));
+                    int rResult = (int) (rTop * alpha + rBottom * (1 - alpha));
+                    int aResult = Integer.max(aTop, aBottom);
+
+                    resultBytes[idx] = (byte) bResult;
+                    resultBytes[idx + 1] = (byte) gResult;
+                    resultBytes[idx + 2] = (byte) rResult;
+                    resultBytes[idx + 3] = (byte) aResult;
+                }
+        );
+
+        return new BgraImage(resultBytes, top.getWidth(), top.getHeight());
+    }
+
+    public BgraImage overlay(BgraImage other) {
+        if (other == null)
+            throw new InvalidParameterException("Image cannot be null!");
+
+        return BgraImage.overlay(this, other);
+    }
+
+    public static BgraImage overlayAll(BgraImage... images) {
+        if (images.length == 0) return null;
+        else if (images.length == 1) return images[0];
+        else {
+            BgraImage result = images[0].clone();
+
+            for (int idx = 1; idx < images.length; ++idx)
+                result = result.overlay(images[idx]);
+
+            return result;
+        }
+    }
+
     // Getters & Setters -----------------------------------------------------------------------------------------------
 
     public byte[] getImageArr() {
         return imageArr;
     }
 
-    public void setImageArr(byte[] imageArr) {
-        this.imageArr = imageArr;
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

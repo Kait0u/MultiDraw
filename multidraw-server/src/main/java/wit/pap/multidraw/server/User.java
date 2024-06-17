@@ -14,7 +14,7 @@ import java.net.Socket;
 public class User {
     private static final Logger log = LogManager.getLogger(User.class.getName());
     private Socket socket;
-    String nickname;
+    private String nickname;
     private Room room;
 
     private final ObjectInputStream in;
@@ -32,13 +32,14 @@ public class User {
             throw new RuntimeException(e);
         }
 
-        try {
-            room.addUser(this);
-        } catch (DuplicateNicknameException e) {
-            log.error(e);
-            sendMessage(new ServerMessage(ServerCommands.REJECT_FROM_ROOM, e.getMessage().getBytes()));
+        if (room != null) {
+            try {
+                setRoom(room);
+            } catch (DuplicateNicknameException e) {
+
+            }
+
         }
-        this.room = room;
     }
 
     public ClientMessage receiveMessage() {
@@ -84,7 +85,14 @@ public class User {
         return room;
     }
 
-    public void setRoom(Room room) {
+    public void setRoom(Room room) throws DuplicateNicknameException {
+        try {
+            room.addUser(this);
+        } catch (DuplicateNicknameException e) {
+            log.error(e);
+            sendMessage(new ServerMessage(ServerCommands.REJECT_FROM_ROOM, e.getMessage().getBytes()));
+            throw e;
+        }
         this.room = room;
     }
 }

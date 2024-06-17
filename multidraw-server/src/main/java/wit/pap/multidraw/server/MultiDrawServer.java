@@ -9,6 +9,7 @@ import wit.pap.multidraw.shared.communication.ClientCommands;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -21,7 +22,7 @@ public class MultiDrawServer {
     private final ServerSocket serverSocket;
     private boolean isRunning = false;
 
-    private Set<User> users;
+    private final Set<User> users;
     private final Set<Room> rooms;
     private final Map<String, Room> nameRoomMap;
     private Queue<Socket> toBeUsers;
@@ -52,7 +53,7 @@ public class MultiDrawServer {
     private void waitForUser() {
         try {
             Socket userSocket = serverSocket.accept();
-            log.info(new StringBuilder("Accepted connection from ").append(serverSocket.getInetAddress()));
+            log.info(new StringBuilder("Accepted connection from ").append(userSocket.getInetAddress()));
             toBeUsers.add(userSocket);
         } catch (IOException e) {
             log.error(e);
@@ -61,45 +62,54 @@ public class MultiDrawServer {
 
     private void assignUsers() {
         if (!toBeUsers.isEmpty()) {
-            try {
-                Socket socket = toBeUsers.poll();
-                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                oos.flush();
-                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            Socket socket = toBeUsers.poll();
 
-                String nickname = null, roomName = null;
+            User user = new User(socket, null, null);
+            log.info(new StringBuilder("Created initial user for ").append(socket.getInetAddress()));
 
-                while (nickname == null || roomName == null) {
-                    ClientMessage message = (ClientMessage) ois.readObject();
-                    logClientMessage(message);
+            String nickname = null, roomName = null;
 
-                    switch (message.getClientCommand()) {
-                        case SET_NICKNAME -> nickname = new String(message.getPayload());
-                        case JOIN_CREATE_ROOM -> roomName = new String(message.getPayload());
-                    }
+            while (nickname == null || roomName == null) {
+                ClientMessage message = user.receiveMessage();
+                logClientMessage(message);
+
+                switch (message.getClientCommand()) {
+                    case SET_NICKNAME -> nickname = new String(message.getPayload());
+                    case JOIN_CREATE_ROOM -> roomName = new String(message.getPayload());
                 }
+            }
 
-                Room room = null;
+            Room room = null;
+            synchronized (nameRoomMap) {
+                room = nameRoomMap.getOrDefault(roomName, null);
+            }
+
+            if (room == null) {
+                room = new Room(roomName);
+
+                synchronized (rooms) {
+                    rooms.add(room);
+                }
                 synchronized (nameRoomMap) {
-                    room = nameRoomMap.getOrDefault(roomName, null);
+                    nameRoomMap.put(roomName, room);
                 }
 
-                if (room == null) {
-                    room = new Room(roomName);
+                log.info(new StringBuilder("Room ").append(roomName).append(" has been created"));
+            }
 
-                    synchronized (rooms) {
-                        rooms.add(room);
-                    }
-                    synchronized (nameRoomMap) {
-                        nameRoomMap.put(roomName, room);
-                    }
+            try {
+                user.setNickname(nickname);
+                user.setRoom(room);
+                synchronized (users) {
+                    users.add(user);
                 }
-
-                User user = new User(socket, nickname, room);
-                users.add(user);
-
-            } catch (IOException | ClassNotFoundException e) {
-                log.error(e);
+                log.info(new StringBuilder(socket.getInetAddress().toString())
+                        .append(" became User ").append(nickname).append(" in room ").append(roomName));
+            } catch (DuplicateNicknameException e) {
+                log.error(
+                        new StringBuilder("User ").append(nickname).append(" could not be added to room ")
+                                .append(roomName).append(". Rejecting...")
+                );
             }
         }
     }
@@ -108,4 +118,10 @@ public class MultiDrawServer {
         log.info(new StringBuilder("Message received: ").append(message.getClientCommand().name()).append(" ")
                 .append(new String(message.getPayload())));
     }
+
+    private void logClientMessage(InetAddress address, ClientMessage message) {
+        log.info(new StringBuilder("[").append(address.toString()).append("] Message received:").append(message.getClientCommand().name()).append(" ")
+                .append(new String(message.getPayload())));
+    }
+
 }
