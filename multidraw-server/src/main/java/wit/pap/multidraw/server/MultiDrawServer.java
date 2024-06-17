@@ -94,6 +94,7 @@ public class MultiDrawServer {
                 }
 
                 User user = new User(socket, nickname, room);
+                users.add(user);
 
             } catch (IOException | ClassNotFoundException e) {
                 log.error(e);
