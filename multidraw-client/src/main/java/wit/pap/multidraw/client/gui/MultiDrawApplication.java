@@ -32,7 +32,7 @@ import java.net.UnknownHostException;
 
 public class MultiDrawApplication extends Application {
     Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
-    TextField tfHost, tfHostPort, tfRoom;
+    TextField tfHost, tfHostPort, tfNickname, tfRoom;
     Spinner<Integer> spnPenSize;
     ColorPicker colorPicker;
 
@@ -69,6 +69,8 @@ public class MultiDrawApplication extends Application {
                 tfHost = new TextField(),
                 new Label("Port: "),
                 tfHostPort = new TextField(),
+                new Label("Nickname: "),
+                tfNickname = new TextField(),
                 new Label("Room ID: "),
                 tfRoom = new TextField(),
                 btnConnectDisconnect = new Button("Connect")
@@ -148,14 +150,14 @@ public class MultiDrawApplication extends Application {
         try {
             InetAddress address = InetAddress.getByName(tfHost.getText());
             Integer port = Integer.valueOf(tfHostPort.getText());
+            String nicknmame = tfNickname.getText();
             String roomName = tfRoom.getText();
 
             tcpHandler = new TCPHandler(address, port);
             tcpHandler.start();
 
-            ClientMessage msg = new ClientMessage(ClientCommands.JOIN_CREATE_ROOM, roomName.getBytes());
-            tcpHandler.queueMessage(msg);
-
+            tcpHandler.queueMessage(new ClientMessage(ClientCommands.SET_NICKNAME, nicknmame.getBytes()));
+            tcpHandler.queueMessage(new ClientMessage(ClientCommands.JOIN_CREATE_ROOM, roomName.getBytes()));
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {

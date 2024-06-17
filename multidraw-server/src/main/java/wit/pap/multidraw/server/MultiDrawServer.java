@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Queue;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class MultiDrawServer {
     private boolean isRunning = false;
 
     private Set<User> users;
+    private Set<Room> rooms;
     private Queue<Socket> toBeUsers;
 
     public MultiDrawServer(int port) {
@@ -33,7 +35,8 @@ public class MultiDrawServer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.users = new LinkedHashSet<>();
+        this.rooms = new HashSet<>();
+        this.users = new HashSet<>();
         this.toBeUsers = new ConcurrentLinkedQueue<>();
     }
 
@@ -64,13 +67,42 @@ public class MultiDrawServer {
                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.flush();
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                ClientMessage message = (ClientMessage) ois.readObject();
-                log.info(new StringBuilder("Message received: ").append(message.getClientCommand().name()).append(" ")
-                        .append(new String(message.getPayload())));
+
+                String nickname = null, roomName = null;
+
+                while (nickname == null || roomName == null) {
+                    ClientMessage message = (ClientMessage) ois.readObject();
+                    logClientMessage(message);
+
+                    switch (message.getClientCommand()) {
+                        case SET_NICKNAME -> nickname = new String(message.getPayload());
+                        case JOIN_CREATE_ROOM -> roomName = new String(message.getPayload());
+                    }
+                }
+
+                final String finalRoomName = roomName;
+                Room room = null;
+                synchronized (rooms) {
+                    room = rooms.stream().filter(r -> r.getName().equals(finalRoomName)).findFirst().orElse(null);
+                }
+
+                if (room == null) {
+                    room = new Room(roomName);
+                    synchronized (rooms) {
+                        rooms.add(room);
+                    }
+                }
+
+                User user = new User(socket, nickname, room);
 
             } catch (IOException | ClassNotFoundException e) {
                 log.error(e);
             }
         }
+    }
+
+    private void logClientMessage(ClientMessage message) {
+        log.info(new StringBuilder("Message received: ").append(message.getClientCommand().name()).append(" ")
+                .append(new String(message.getPayload())));
     }
 }

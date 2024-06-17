@@ -19,7 +19,7 @@ public class TCPHandler extends Thread {
     private ObjectInputStream inputStream;
 
     private final Queue<Message> messagesToSend;
-    private AtomicBoolean running;
+    private final AtomicBoolean running;
 
     public TCPHandler(String serverAddress, int serverPort) throws IOException {
         this(InetAddress.getByName(serverAddress), serverPort);
@@ -94,6 +94,12 @@ public class TCPHandler extends Thread {
             if (socket != null) socket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean isRunning() {
+        synchronized (this.running) {
+            return this.running.get();
         }
     }
 }
