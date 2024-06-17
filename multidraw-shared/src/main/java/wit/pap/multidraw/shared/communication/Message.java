@@ -1,14 +1,12 @@
-package wit.pap.multidraw.shared;
+package wit.pap.multidraw.shared.communication;
 
 import java.io.Serializable;
 
-public class Message implements Serializable {
-    private byte commandCode;
+public abstract class Message implements Serializable {
     private int length;
     private byte[] payload;
 
-    public Message(byte commandCode, byte[] payload, int length) {
-        this.commandCode = commandCode;
+    public Message(byte[] payload, int length) {
         if (payload != null) {
             this.payload = payload;
             this.length = length;
@@ -19,20 +17,11 @@ public class Message implements Serializable {
 
     }
 
-    public Message(byte commandCode, byte[] payload) {
-        this(commandCode, payload, payload.length);
+    public Message(byte[] payload) {
+        this(payload, payload.length);
     }
 
     // Getters & Setters
-
-
-    public byte getCommandCode() {
-        return commandCode;
-    }
-
-    public void setCommandCode(byte commandCode) {
-        this.commandCode = commandCode;
-    }
 
     public int getLength() {
         return length;

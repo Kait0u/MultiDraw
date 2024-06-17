@@ -1,7 +1,6 @@
 package wit.pap.multidraw.client.gui;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -21,13 +20,12 @@ import javafx.stage.Stage;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.client.utils.TCPHandler;
-import wit.pap.multidraw.shared.globals.ClientCommands;
+import wit.pap.multidraw.shared.communication.ClientCommands;
+import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.globals.Globals;
-import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.LayeredImage;
-import wit.pap.multidraw.shared.Message;
+import wit.pap.multidraw.shared.communication.Message;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -155,7 +153,7 @@ public class MultiDrawApplication extends Application {
             tcpHandler = new TCPHandler(address, port);
             tcpHandler.start();
 
-            Message msg = new Message((byte) ClientCommands.PASS.getIdx(), roomName.getBytes());
+            ClientMessage msg = new ClientMessage(ClientCommands.JOIN_CREATE_ROOM, roomName.getBytes());
             tcpHandler.queueMessage(msg);
 
         } catch (UnknownHostException e) {

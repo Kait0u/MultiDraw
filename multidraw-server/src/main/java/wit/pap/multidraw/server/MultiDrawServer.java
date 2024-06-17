@@ -2,55 +2,74 @@ package wit.pap.multidraw.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import wit.pap.multidraw.shared.Message;
+import wit.pap.multidraw.shared.communication.ClientMessage;
+import wit.pap.multidraw.shared.communication.Message;
+import wit.pap.multidraw.shared.communication.ClientCommands;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MultiDrawServer {
     public static final Logger log = LogManager.getLogger(MultiDrawServer.class.getName());
 
     private final int port;
-    private final ServerSocket socket;
+    private final ServerSocket serverSocket;
     private boolean isRunning = false;
 
-    private Set<Socket> users;
+    private Set<User> users;
+    private Queue<Socket> toBeUsers;
 
     public MultiDrawServer(int port) {
         this.port = port;
         try {
-            this.socket = new ServerSocket(this.port);
+            this.serverSocket = new ServerSocket(this.port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         this.users = new LinkedHashSet<>();
+        this.toBeUsers = new ConcurrentLinkedQueue<>();
     }
 
     public void start() {
         isRunning = true;
-        log.info(new StringBuilder("Server started on port ").append(Integer.toString(port)));
+        log.info(new StringBuilder("Server started on port ").append(port));
         while (isRunning) {
-            try {
-                Socket userSocket = socket.accept();
-                log.info(new StringBuilder("Accepted connection from ").append(socket.getInetAddress()));
-                users.add(userSocket);
-                ObjectOutputStream oos = new ObjectOutputStream(userSocket.getOutputStream());
-                oos.flush();
-                ObjectInputStream ois = new ObjectInputStream(userSocket.getInputStream());
-                Message message = (Message) ois.readObject();
-                System.out.println(message.getCommandCode());
-                System.out.println(Arrays.toString(message.getPayload()));
-                System.out.println(new String(message.getPayload()));
-            } catch (IOException e) {
+            waitForUser();
+            assignUsers();
+        }
+    }
 
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+
+    private void waitForUser() {
+        try {
+            Socket userSocket = serverSocket.accept();
+            log.info(new StringBuilder("Accepted connection from ").append(serverSocket.getInetAddress()));
+            toBeUsers.add(userSocket);
+        } catch (IOException e) {
+            log.error(e);
+        }
+    }
+
+    private void assignUsers() {
+        if (!toBeUsers.isEmpty()) {
+            try {
+                Socket socket = toBeUsers.poll();
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.flush();
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                ClientMessage message = (ClientMessage) ois.readObject();
+                log.info(new StringBuilder("Message received: ").append(message.getClientCommand().name()).append(" ")
+                        .append(new String(message.getPayload())));
+
+            } catch (IOException | ClassNotFoundException e) {
+                log.error(e);
             }
         }
     }

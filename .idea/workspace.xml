@@ -4,54 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Icons added.">
-      <change afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/widgets/PannableScrollPane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/resources/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/resources/icon_big.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/test/java/wit/pap/AppTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/src/main/resources/log4j2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-server/src/test/java/wit/pap/AppTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/BgraImage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/LayeredImage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/Message.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/ClientCommands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/test/java/wit/pap/AppTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Both.xml" beforeDir="false" />
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Deleted faulty test files.">
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientCommands.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerCommands.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/PannableScrollPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/gui/widgets/PannableScrollPane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/ClientCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/globals/ClientCommands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/BgraImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/BgraImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/LayeredImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/LayeredImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/java/wit/pap/multidraw/shared/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gui/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/resources/gui/icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gui/icon_big.png" beforeDir="false" afterPath="$PROJECT_DIR$/.old.src/main/resources/gui/icon_big.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/ClientCommands.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,9 +25,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
-        <option value="Class" />
         <option value="module-info" />
+        <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -79,6 +43,9 @@
         <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
       </MavenGeneralSettings>
     </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -109,6 +76,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "vue.rearranger.settings.migration": "true"
   }
@@ -182,7 +150,7 @@
       <workItem from="1718477756682" duration="2468000" />
       <workItem from="1718480235769" duration="12531000" />
       <workItem from="1718557003081" duration="21053000" />
-      <workItem from="1718615516154" duration="6251000" />
+      <workItem from="1718615516154" duration="10275000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -360,7 +328,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718584639472</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Finished project structure overhaul.">
+      <option name="closed" value="true" />
+      <created>1718621971703</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1718621971703</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Deleted faulty test files.">
+      <option name="closed" value="true" />
+      <created>1718622071819</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1718622071819</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -400,7 +384,9 @@
     <MESSAGE value="Added a Message class." />
     <MESSAGE value="Made first successful attempt at communication between the client and the server." />
     <MESSAGE value="Icons added." />
-    <option name="LAST_COMMIT_MESSAGE" value="Icons added." />
+    <MESSAGE value="Finished project structure overhaul." />
+    <MESSAGE value="Deleted faulty test files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Deleted faulty test files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

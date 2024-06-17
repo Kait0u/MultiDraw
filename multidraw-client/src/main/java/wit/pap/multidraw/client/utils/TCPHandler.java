@@ -1,16 +1,14 @@
 package wit.pap.multidraw.client.utils;
 
-import wit.pap.multidraw.shared.Message;
+import wit.pap.multidraw.shared.communication.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class TCPHandler extends Thread {
     private Socket socket;
