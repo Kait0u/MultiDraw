@@ -120,6 +120,7 @@ public class MultiDrawApplication extends Application {
 
 
         primaryStage.setTitle("MultiDraw");
+        primaryStage.getIcons().add(new Image(MultiDrawApplication.class.getResourceAsStream("/gui/icon.png")));
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(Globals.WINDOW_MIN_DIM);
         primaryStage.setMinWidth(Globals.WINDOW_MIN_DIM);
