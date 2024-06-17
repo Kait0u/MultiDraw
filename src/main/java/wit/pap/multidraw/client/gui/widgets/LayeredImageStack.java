@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import wit.pap.multidraw.globals.Globals;
+import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.LayeredImage;
 
 public class LayeredImageStack extends StackPane {
@@ -34,10 +35,14 @@ public class LayeredImageStack extends StackPane {
         heightProperty().addListener((obs, oldVal, newVal) -> draw());
 
         // Initial drawing
-        draw();
+        draw(true);
     }
 
     private void draw() {
+        draw(false);
+    }
+
+    private void draw(boolean clear) {
         double width = getWidth();
         double height = getHeight();
 
@@ -47,7 +52,8 @@ public class LayeredImageStack extends StackPane {
         GraphicsContext gc = fgCanvas.getGraphicsContext2D();
 
         // Clear canvas
-        gc.clearRect(0, 0, width, height);
+        if (clear)
+            gc.clearRect(0, 0, width, height);
 
         // Draw background image
         if (bgImage != null) {
@@ -79,6 +85,16 @@ public class LayeredImageStack extends StackPane {
 
     public void setLayeredImage(LayeredImage layeredImage) {
         this.layeredImage = layeredImage;
+        draw();
+    }
+
+    public void setMgImage(BgraImage image) {
+        layeredImage.setMiddleground(image);
+        draw();
+    }
+
+    public void setBgImage(BgraImage image) {
+        layeredImage.setBackground(image);
         draw();
     }
 }

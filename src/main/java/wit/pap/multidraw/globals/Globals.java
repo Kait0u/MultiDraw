@@ -14,4 +14,7 @@ public class Globals {
     public static final int WINDOW_INITIAL_HEIGHT = 768;
 
     public static final int WINDOW_MIN_DIM = 512;
+
+    public static final int MAX_DATAGRAM_LENGTH_KB = 16;
+    public static final int MAX_DATAGRAM_LENGTH_B = MAX_DATAGRAM_LENGTH_KB * 1024;
 }

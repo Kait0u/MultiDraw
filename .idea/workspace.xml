@@ -4,16 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Used globals instead of magic numbers.">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/BgraImage.java" afterDir="false" />
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Added a Message class.">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Both.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/ClientCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/ClientCommands.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/globals/Globals.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/LayeredImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wit/pap/multidraw/shared/LayeredImage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,32 +52,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Client Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MultiDrawApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Client Main.executor": "Run",
+    "Application.HelloApplication.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.MultiDrawApplication.executor": "Run",
+    "Application.Server Main.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="wit.pap.multidraw" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Compound.Both">
     <configuration name="Client Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="wit.pap.multidraw.client.Main" />
       <module name="multidraw" />
@@ -83,6 +86,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Server Main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="wit.pap.multidraw.server.Main" />
+      <module name="multidraw" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Client Main" />
+      <item itemvalue="Application.Server Main" />
+      <item itemvalue="Compound.Both" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -102,7 +117,8 @@
       <workItem from="1718267973730" duration="8851000" />
       <workItem from="1718393598330" duration="4884000" />
       <workItem from="1718477756682" duration="2468000" />
-      <workItem from="1718480235769" duration="10941000" />
+      <workItem from="1718480235769" duration="12531000" />
+      <workItem from="1718557003081" duration="19802000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -224,11 +240,62 @@
       <option name="project" value="LOCAL" />
       <updated>1718481136969</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Added an image class, a layered image class, and a widget that displays the layers.">
+      <option name="closed" value="true" />
+      <created>1718492558495</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1718492558495</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Increased the default pen size.">
+      <option name="closed" value="true" />
+      <created>1718492689387</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1718492689387</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Fixed a bug where the channel count was not getting accounted for.">
+      <option name="closed" value="true" />
+      <created>1718567003630</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1718567003630</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Added a port field.">
+      <option name="closed" value="true" />
+      <created>1718572706580</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1718572706580</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Added a Message class.">
+      <option name="closed" value="true" />
+      <created>1718575532350</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1718575532350</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
@@ -246,6 +313,21 @@
     <MESSAGE value="New globals added." />
     <MESSAGE value="Removed unnecessary dependencies." />
     <MESSAGE value="Used globals instead of magic numbers." />
-    <option name="LAST_COMMIT_MESSAGE" value="Used globals instead of magic numbers." />
+    <MESSAGE value="Added an image class, a layered image class, and a widget that displays the layers." />
+    <MESSAGE value="Increased the default pen size." />
+    <MESSAGE value="Fixed a bug where the channel count was not getting accounted for." />
+    <MESSAGE value="Added a port field." />
+    <MESSAGE value="Added a Message class." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a Message class." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="18" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

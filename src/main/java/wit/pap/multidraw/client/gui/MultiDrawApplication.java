@@ -1,6 +1,7 @@
 package wit.pap.multidraw.client.gui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,12 +20,17 @@ import javafx.stage.Stage;
 
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
+import wit.pap.multidraw.client.utils.TCPHandler;
+import wit.pap.multidraw.globals.ClientCommands;
 import wit.pap.multidraw.globals.Globals;
 import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.LayeredImage;
+import wit.pap.multidraw.shared.Message;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class MultiDrawApplication extends Application {
     Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
@@ -36,6 +42,8 @@ public class MultiDrawApplication extends Application {
     LayeredImageStack imageStack;
     Canvas canvas;
     ImageView bgImageView, mgImageView;
+
+    TCPHandler tcpHandler;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -103,6 +111,8 @@ public class MultiDrawApplication extends Application {
 
         btnClear.setOnAction(event -> clearCanvas());
 
+        btnConnectDisconnect.setOnAction(event -> connect());
+
 
         PannableScrollPane scrollPane = new PannableScrollPane();
         scrollPane.setContent(imageStack);
@@ -128,5 +138,36 @@ public class MultiDrawApplication extends Application {
         int size = spnPenSize.getValue();
         int halfSize = size / 2;
         canvas.getGraphicsContext2D().clearRect(x - halfSize, y - halfSize, size, size);
+    }
+
+    private void reset() {
+        layeredImage = new LayeredImage();
+        imageStack.setLayeredImage(layeredImage);
+    }
+
+    private void connect() {
+        try {
+            InetAddress address = InetAddress.getByName(tfHost.getText());
+            Integer port = Integer.valueOf(tfHostPort.getText());
+            String roomName = tfRoom.getText();
+
+            tcpHandler = new TCPHandler(address, port);
+            tcpHandler.start();
+
+            Message msg = new Message((byte) ClientCommands.PASS.getIdx(), roomName.getBytes());
+            tcpHandler.queueMessage(msg);
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ---------
+
+
+    public LayeredImage getLayeredImage() {
+        return layeredImage;
     }
 }
