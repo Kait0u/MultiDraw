@@ -3,6 +3,7 @@ package wit.pap.multidraw.client.utils;
 import wit.pap.multidraw.shared.communication.ClientCommands;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.Message;
+import wit.pap.multidraw.shared.communication.ServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -70,10 +71,41 @@ public class TCPHandler extends Thread {
         }
     }
 
-    private void handleMessage(Message message) {
-        // Handle incoming message
-        System.out.println("Received message: " + message);
-        // You can process the message further here
+    public ServerMessage receiveMessage() {
+        if (this.inputStream != null) {
+            try {
+                return (ServerMessage) this.inputStream.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Uh oh!");
+            }
+        }
+
+        return null;
+    }
+
+    public ServerMessage receiveMessageOrNull() {
+        if (this.inputStream != null) {
+            try {
+                if (this.inputStream.available() > 0) {
+                    return (ServerMessage) this.inputStream.readObject();
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Uh oh!");
+            }
+        }
+        return null;
+    }
+
+    private void handleMessage(ServerMessage message) {
+        switch (message.getServerCommand()) {
+            case POKE -> {}
+            case ACCEPT_INT0_ROOM -> {
+                System.out.println("Yay!");
+            }
+            case REJECT_FROM_ROOM -> {
+                System.out.println("Nay!");
+            }
+        }
     }
 
     public synchronized void stopHandler() {
