@@ -44,15 +44,9 @@ public class TCPHandler extends Thread {
         this.running.set(true);
         try {
             while (this.running.get()) {
-//                System.out.println("Sending...");
                 sendMessages();
-//                System.out.println("Sent!");
-//                System.out.println("Receiving...");
                 receiveMessages();
-//                System.out.println("Received!");
-//                System.out.println("Handling...");
                 handleMessages();
-//                System.out.println("Handled!");
             }
         } finally {
             close();
@@ -97,7 +91,7 @@ public class TCPHandler extends Thread {
             } catch (SocketTimeoutException e) {
 
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Uh oh!");
+                e.printStackTrace();
             }
         }
 
@@ -119,8 +113,6 @@ public class TCPHandler extends Thread {
                 throw new RuntimeException(e);
             }
         }
-
-//        return null;
     }
 
     private void receiveMessages() {
@@ -171,13 +163,16 @@ public class TCPHandler extends Thread {
 
     private void close() {
         try {
-            if (outputStream != null) {
+            synchronized (outputStream) {
                 ClientMessage msg = new ClientMessage(ClientCommands.DISCONNECT, null);
+                sendMessage(msg);
                 outputStream.close();
             }
 
-            if (inputStream != null)
+            synchronized (inputStream) {
                 inputStream.close();
+            }
+
             if (socket != null) socket.close();
         } catch (IOException e) {
             e.printStackTrace();
