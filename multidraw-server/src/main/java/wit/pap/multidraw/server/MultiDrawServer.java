@@ -21,7 +21,8 @@ public class MultiDrawServer {
     private final Set<User> users;
     private final Set<Room> rooms;
     private final Map<String, Room> nameRoomMap;
-    private Queue<Socket> toBeUsers;
+    private final Map<Room, Thread> roomThreadMap;
+    private final Queue<Socket> toBeUsers;
 
     public MultiDrawServer(int port) {
         this.port = port;
@@ -32,6 +33,7 @@ public class MultiDrawServer {
         }
         this.rooms = new HashSet<>();
         this.nameRoomMap = new HashMap<>();
+        this.roomThreadMap = new HashMap<>();
         this.users = new HashSet<>();
         this.toBeUsers = new ConcurrentLinkedQueue<>();
     }
@@ -71,7 +73,7 @@ public class MultiDrawServer {
 
             while (nickname == null || roomName == null) {
                 ClientMessage message = user.receiveMessage();
-                logClientMessage(message);
+                logClientMessage(socket.getInetAddress(), message);
 
                 switch (message.getClientCommand()) {
                     case SET_NICKNAME -> nickname = new String(message.getPayload());
@@ -117,6 +119,14 @@ public class MultiDrawServer {
 
         log.info(new StringBuilder("Room ").append(name).append(" has been created"));
 
+        Thread roomThread = new Thread(room);
+        synchronized (roomThreadMap) {
+            roomThreadMap.put(room, roomThread);
+        }
+
+        roomThread.start();
+        log.info(new StringBuilder("Room ").append(name).append(" has started execution!"));
+
         return room;
     }
 
@@ -126,7 +136,7 @@ public class MultiDrawServer {
     }
 
     private void logClientMessage(InetAddress address, ClientMessage message) {
-        log.info(new StringBuilder("[").append(address.toString()).append("] Message received:").append(message.getClientCommand().name()).append(" ")
+        log.info(new StringBuilder("[").append(address.toString()).append("] Message received: ").append(message.getClientCommand().name()).append(" ")
                 .append(new String(message.getPayload())));
     }
 
