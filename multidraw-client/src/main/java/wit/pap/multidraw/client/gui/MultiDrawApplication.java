@@ -3,7 +3,6 @@ package wit.pap.multidraw.client.gui;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,14 +29,10 @@ import wit.pap.multidraw.shared.communication.ClientCommands;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.globals.Globals;
 import wit.pap.multidraw.shared.LayeredImage;
-import wit.pap.multidraw.shared.communication.Message;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class MultiDrawApplication extends Application {
     Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
@@ -141,8 +136,8 @@ public class MultiDrawApplication extends Application {
         primaryStage.setTitle("MultiDraw");
         primaryStage.getIcons().add(new Image(MultiDrawApplication.class.getResourceAsStream("/icon.png")));
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(Globals.WINDOW_MIN_DIM);
-        primaryStage.setMinWidth(Globals.WINDOW_MIN_DIM);
+        primaryStage.setMinWidth(Globals.WINDOW_MIN_W);
+        primaryStage.setMinHeight(Globals.WINDOW_MIN_H);
         primaryStage.setWidth(Globals.WINDOW_INITIAL_WIDTH);
         primaryStage.setHeight(Globals.WINDOW_INITIAL_HEIGHT);
         primaryStage.show();
