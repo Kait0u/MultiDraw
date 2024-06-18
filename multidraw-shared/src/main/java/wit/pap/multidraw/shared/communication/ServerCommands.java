@@ -1,7 +1,7 @@
 package wit.pap.multidraw.shared.communication;
 
 public enum ServerCommands {
-    PASS,
+    POKE,
     ACCEPT_INT0_ROOM,
     REJECT_FROM_ROOM,
 

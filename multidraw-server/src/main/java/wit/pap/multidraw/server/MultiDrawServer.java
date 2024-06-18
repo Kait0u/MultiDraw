@@ -3,12 +3,8 @@ package wit.pap.multidraw.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import wit.pap.multidraw.shared.communication.ClientMessage;
-import wit.pap.multidraw.shared.communication.Message;
-import wit.pap.multidraw.shared.communication.ClientCommands;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -43,9 +39,13 @@ public class MultiDrawServer {
     public void start() {
         isRunning = true;
         log.info(new StringBuilder("Server started on port ").append(port));
+        run();
+    }
+
+    public void run() {
         while (isRunning) {
             waitForUser();
-            assignUsers();
+            assignUser();
         }
     }
 
@@ -60,7 +60,7 @@ public class MultiDrawServer {
         }
     }
 
-    private void assignUsers() {
+    private void assignUser() {
         if (!toBeUsers.isEmpty()) {
             Socket socket = toBeUsers.poll();
 
@@ -85,16 +85,7 @@ public class MultiDrawServer {
             }
 
             if (room == null) {
-                room = new Room(roomName);
-
-                synchronized (rooms) {
-                    rooms.add(room);
-                }
-                synchronized (nameRoomMap) {
-                    nameRoomMap.put(roomName, room);
-                }
-
-                log.info(new StringBuilder("Room ").append(roomName).append(" has been created"));
+                room = createRoom(roomName);
             }
 
             try {
@@ -112,6 +103,21 @@ public class MultiDrawServer {
                 );
             }
         }
+    }
+
+    private Room createRoom(String name) {
+        Room room = new Room(name);
+
+        synchronized (rooms) {
+            rooms.add(room);
+        }
+        synchronized (nameRoomMap) {
+            nameRoomMap.put(name, room);
+        }
+
+        log.info(new StringBuilder("Room ").append(name).append(" has been created"));
+
+        return room;
     }
 
     private void logClientMessage(ClientMessage message) {

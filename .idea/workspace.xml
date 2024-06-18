@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Improved server room name lookup">
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Fixed a sudden, random collapse of the whole project. Reason unknown.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-shared/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/BgraImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/BgraImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerCommands.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -384,7 +382,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718656102681</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Fixed a sudden, random collapse of the whole project. Reason unknown.">
+      <option name="closed" value="true" />
+      <created>1718668214529</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1718668214529</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,7 +408,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Globals added." />
     <MESSAGE value="Defined some basic Client Commands" />
     <MESSAGE value="Removed unnecessary files." />
     <MESSAGE value="Added a LayeredImage class stub." />
@@ -427,7 +432,8 @@
     <MESSAGE value="Added nickname setting and roomName setting." />
     <MESSAGE value="User is now added to the set of users upon creation." />
     <MESSAGE value="Improved server room name lookup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved server room name lookup" />
+    <MESSAGE value="Fixed a sudden, random collapse of the whole project. Reason unknown." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a sudden, random collapse of the whole project. Reason unknown." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

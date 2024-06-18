@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class User {
     private static final Logger log = LogManager.getLogger(User.class.getName());
@@ -19,10 +21,12 @@ public class User {
 
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
+    private final AtomicBoolean isDead;
 
     public User(Socket socket, String nickname, Room room) {
         this.socket = socket;
         this.nickname = nickname;
+        this.isDead = new AtomicBoolean(false);
 
         try {
             out = new ObjectOutputStream(this.socket.getOutputStream());
@@ -36,9 +40,8 @@ public class User {
             try {
                 setRoom(room);
             } catch (DuplicateNicknameException e) {
-
+                this.isDead.set(true);
             }
-
         }
     }
 
@@ -47,6 +50,20 @@ public class User {
             return (ClientMessage) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             log.error(e);
+            this.isDead.set(true);
+        }
+
+        return null;
+    }
+
+    public ClientMessage receiveMessageOrNull() {
+        try {
+            if (in.available() > 0) {
+                return receiveMessage();
+            }
+        } catch (IOException e) {
+            log.error(e);
+            this.isDead.set(true);
         }
 
         return null;
@@ -60,6 +77,7 @@ public class User {
             log.info(new StringBuilder("Sent message ").append(message));
         } catch (IOException e) {
             log.error(e);
+            this.isDead.set(true);
         }
     }
 
@@ -94,5 +112,9 @@ public class User {
             throw e;
         }
         this.room = room;
+    }
+
+    public boolean isDead() {
+        return this.isDead.get();
     }
 }
