@@ -55,16 +55,24 @@ public class Room implements Runnable {
         while (isRunning.get()) {
             try {
                 catchDeadUsers();
-                receiveMessages();
-                prepareMiddleGrounds();
-                handleMessages();
-                sendMessages();
+
+                boolean performActivities = false;
+                synchronized (users) {
+                    performActivities = !users.isEmpty();
+                }
+
+                if (performActivities) {
+                    receiveMessages();
+                    prepareMiddleGrounds();
+                    handleMessages();
+                    sendMessages();
+                }
+
                 preventLinger(false);
             }
             catch (Exception e) {
-                e.printStackTrace();
-//                log.error(e);
-//                preventLinger(true);
+                log.error(e);
+                preventLinger(true);
             }
 
         }
@@ -161,6 +169,10 @@ public class Room implements Runnable {
     }
 
     private void receiveMessages() {
+        if (users.isEmpty()) {
+            log.info(new StringBuilder("Room \"").append(name).append("\" has no users to receive messages from!"));
+            return;
+        }
         Set<ClientMessage> toAdd = new HashSet<>();
         Map<ClientMessage, User> senders = new HashMap<>();
         synchronized (users) {
@@ -183,6 +195,11 @@ public class Room implements Runnable {
     private void prepareMiddleGrounds() {
         if (Duration.between(lastImageMerge, Instant.now()).toSeconds() < Globals.MIDDLEGROUND_CREATION_INTERVAL_SECONDS)
             return;
+
+        if (users.isEmpty()) {
+            log.info(new StringBuilder("Room \"").append(name).append("\" has no users to prepare middleGrounds for!"));
+            return;
+        }
 
         Map<User, BgraImage> middleGrounds = new HashMap<>();
 
@@ -228,6 +245,11 @@ public class Room implements Runnable {
     }
 
     private void sendMessages() {
+        if (users.isEmpty()) {
+            log.info(new StringBuilder("Room \"").append(name).append("\" has no users to send messages to!"));
+            return;
+        }
+
         log.info(new StringBuilder("Room \"").append(name).append("\": sending messages..."));
         synchronized (messagesToSend) {
             synchronized (messageRecipients) {
