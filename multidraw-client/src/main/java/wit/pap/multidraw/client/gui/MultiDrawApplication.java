@@ -3,6 +3,7 @@ package wit.pap.multidraw.client.gui;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,6 +23,7 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
 
 import javafx.util.Duration;
+import wit.pap.multidraw.client.gui.utilities.Alerts;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.client.utils.TCPHandler;
@@ -168,6 +170,7 @@ public class MultiDrawApplication extends Application {
             String roomName = tfRoom.getText();
 
             tcpHandler = new TCPHandler(address, port);
+            configureTcpHandlerCbs();
 
             tcpHandler.queueMessages(
                     new ClientMessage(ClientCommands.SET_NICKNAME, nicknmame.getBytes()),
@@ -186,16 +189,35 @@ public class MultiDrawApplication extends Application {
         }
     }
 
+    private void configureTcpHandlerCbs() {
+        if (tcpHandler == null) return;
+
+        tcpHandler.setCbOnClose(() -> Platform.runLater(this::freeForm));
+        tcpHandler.setCbShowError(s -> Platform.runLater(
+                () -> Alerts.showErrorAlert("The following error has occurred:", s)
+            )
+        );
+        tcpHandler.setCbShowMessage(s -> Platform.runLater(
+                () -> Alerts.showInfoAlert("The following has occurred:", s)
+            )
+        );
+    }
+
     private void disconnect() {
         tcpHandler.stopHandler();
-        tcpHandler = null;
+        freeForm();
+    }
+
+    private void freeForm() {
+        btnConnectDisconnect.setDisable(true);
 
         Timeline timeline = new Timeline (
-            new KeyFrame(Duration.seconds(5), evt -> {
-                connectionForm.setDisable(false);
-                btnConnectDisconnect.setText("Connect");
-                btnConnectDisconnect.setOnAction(e -> connect());
-            }));
+                new KeyFrame(Duration.seconds(5), evt -> {
+                    connectionForm.setDisable(false);
+                    btnConnectDisconnect.setText("Connect");
+                    btnConnectDisconnect.setOnAction(e -> connect());
+                    btnConnectDisconnect.setDisable(false);
+                }));
 
         timeline.play();
     }

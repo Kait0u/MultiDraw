@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Fixed establishing whether the user is dead or not.">
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Fixed disconnecting a little.">
+      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/utilities/Alerts.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,8 +96,8 @@
       <recent name="wit.pap.multidraw" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.B O T H">
-    <configuration name="Client Main" type="Application" factoryName="Application">
+  <component name="RunManager" selected="Application.Client Main">
+    <configuration name="Client Main" type="Application" factoryName="Application" singleton="false">
       <option name="ALTERNATIVE_JRE_PATH" value="21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="wit.pap.multidraw.client.Main" />
@@ -149,7 +149,7 @@
       <workItem from="1718615516154" duration="10275000" />
       <workItem from="1718645733123" duration="16436000" />
       <workItem from="1718665705329" duration="903000" />
-      <workItem from="1718697473728" duration="13075000" />
+      <workItem from="1718697473728" duration="39972000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -423,7 +423,111 @@
       <option name="project" value="LOCAL" />
       <updated>1718703621047</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Correctly established further communication.">
+      <option name="closed" value="true" />
+      <created>1718714401857</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1718714401857</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Restructurized GUI">
+      <option name="closed" value="true" />
+      <created>1718718901469</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1718718901469</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Reconfigured minimal window dimensions to fit GUI">
+      <option name="closed" value="true" />
+      <created>1718719125373</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1718719125373</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Dead rooms now get deleted.">
+      <option name="closed" value="true" />
+      <created>1718732681064</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1718732681064</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Adjusted timeout when waiting for messages.">
+      <option name="closed" value="true" />
+      <created>1718732705725</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1718732705725</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Made BgraImage serializable.">
+      <option name="closed" value="true" />
+      <created>1718743308121</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1718743308121</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Added new ServerCommands">
+      <option name="closed" value="true" />
+      <created>1718743321553</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1718743321553</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Added Serialization utilities.">
+      <option name="closed" value="true" />
+      <created>1718743352607</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1718743352607</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Adjusted User socket timeout on the server.">
+      <option name="closed" value="true" />
+      <created>1718743377830</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1718743377830</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Minor cleanup.">
+      <option name="closed" value="true" />
+      <created>1718743576750</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1718743576750</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Added image synchronization logic on the server, as well as improved messaging.">
+      <option name="closed" value="true" />
+      <created>1718747294626</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1718747294626</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Tried to make termination more &quot;polite&quot; with proper closings.">
+      <option name="closed" value="true" />
+      <created>1718747863553</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1718747863553</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Fixed disconnecting a little.">
+      <option name="closed" value="true" />
+      <created>1718753663982</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1718753663982</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -441,19 +545,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added a separate Main function to be an entrypoint, done some refactorization." />
-    <MESSAGE value="Created a PannableScrollPane" />
-    <MESSAGE value="Simplified a button" />
-    <MESSAGE value="New globals added." />
-    <MESSAGE value="Removed unnecessary dependencies." />
-    <MESSAGE value="Used globals instead of magic numbers." />
-    <MESSAGE value="Added an image class, a layered image class, and a widget that displays the layers." />
-    <MESSAGE value="Increased the default pen size." />
-    <MESSAGE value="Fixed a bug where the channel count was not getting accounted for." />
-    <MESSAGE value="Added a port field." />
-    <MESSAGE value="Added a Message class." />
-    <MESSAGE value="Made first successful attempt at communication between the client and the server." />
-    <MESSAGE value="Icons added." />
     <MESSAGE value="Finished project structure overhaul." />
     <MESSAGE value="Deleted faulty test files." />
     <MESSAGE value="Revamped communications between the client and the server." />
@@ -466,7 +557,20 @@
     <MESSAGE value="Fixed a return statement's position." />
     <MESSAGE value="Rooms now start after creation." />
     <MESSAGE value="Fixed establishing whether the user is dead or not." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed establishing whether the user is dead or not." />
+    <MESSAGE value="Correctly established further communication." />
+    <MESSAGE value="Restructurized GUI" />
+    <MESSAGE value="Reconfigured minimal window dimensions to fit GUI" />
+    <MESSAGE value="Dead rooms now get deleted." />
+    <MESSAGE value="Adjusted timeout when waiting for messages." />
+    <MESSAGE value="Made BgraImage serializable." />
+    <MESSAGE value="Added new ServerCommands" />
+    <MESSAGE value="Added Serialization utilities." />
+    <MESSAGE value="Adjusted User socket timeout on the server." />
+    <MESSAGE value="Minor cleanup." />
+    <MESSAGE value="Added image synchronization logic on the server, as well as improved messaging." />
+    <MESSAGE value="Tried to make termination more &quot;polite&quot; with proper closings." />
+    <MESSAGE value="Fixed disconnecting a little." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed disconnecting a little." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

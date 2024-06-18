@@ -166,8 +166,13 @@ public class MultiDrawServer {
                 if (!r.isRunning()){
                     synchronized (roomThreadMap) {
                         Thread thread = roomThreadMap.getOrDefault(r, null);
-                        if (thread != null && !thread.isAlive()) {
-                            roomThreadMap.remove(r);
+                        if (thread != null) {
+                            try {
+                                thread.interrupt();
+                                roomThreadMap.remove(r);
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
                         }
                     }
 

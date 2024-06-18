@@ -190,6 +190,10 @@ public class Room implements Runnable {
         synchronized (messageSenders) {
             messageSenders.putAll(senders);
         }
+
+        if (!toAdd.isEmpty()) {
+            log.info(new StringBuilder("Room \"").append(name).append("\": messages received!"));
+        }
     }
 
     private void prepareMiddleGrounds() {
