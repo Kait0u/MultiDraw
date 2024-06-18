@@ -24,6 +24,11 @@ public class User {
 
     public User(Socket socket, String nickname, Room room) {
         this.socket = socket;
+        try {
+            this.socket.setSoTimeout(400);
+        } catch (SocketException e) {
+            log.error(e);
+        }
         this.nickname = nickname;
         this.isDead = new AtomicBoolean(false);
 
