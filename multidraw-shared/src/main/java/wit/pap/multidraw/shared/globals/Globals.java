@@ -16,6 +16,8 @@ public class Globals {
     public static final int WINDOW_MIN_W = 960;
     public static final int WINDOW_MIN_H = 512;
 
-    public static final int MAX_DATAGRAM_LENGTH_KB = 16;
-    public static final int MAX_DATAGRAM_LENGTH_B = MAX_DATAGRAM_LENGTH_KB * 1024;
+
+    public static final int DEAD_USERS_CHECK_INTERVAL_SECONDS = 20;
+    public static final int DEAD_ROOM_CHECK_INTERVAL_SECONDS = 20;
+    public static final int MAX_ROOM_LINGER_MINUTES = 1;
 }

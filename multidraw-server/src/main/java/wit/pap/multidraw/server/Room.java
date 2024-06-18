@@ -5,12 +5,13 @@ import org.apache.logging.log4j.Logger;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.ServerCommands;
 import wit.pap.multidraw.shared.communication.ServerMessage;
+import wit.pap.multidraw.shared.globals.Globals;
 
-import java.net.SocketException;
 import java.security.InvalidParameterException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,6 +20,7 @@ public class Room implements Runnable {
     private final String name;
     private final Set<User> users;
     private final AtomicBoolean isRunning;
+    private Instant lastUserRemoval, lastDeadUserCheck;
 
     public Room(String name) {
         if (name == null)
@@ -27,6 +29,19 @@ public class Room implements Runnable {
         this.name = name;
         this.users = new LinkedHashSet<>();
         this.isRunning = new AtomicBoolean(false);
+        this.lastDeadUserCheck = Instant.now();
+        this.lastUserRemoval = Instant.now();
+    }
+
+    @Override
+    public void run() {
+        isRunning.set(true);
+        while (isRunning.get()) {
+            catchDeadUsers();
+            preventLinger();
+        }
+
+        log.info(new StringBuilder("Room \"").append(name).append("\" ceases to operate!"));
     }
 
     public void addUser(User user) throws DuplicateNicknameException {
@@ -45,6 +60,7 @@ public class Room implements Runnable {
                                 .append(". Current user count: ")
                                 .append(users.size())
                 );
+                user.sendMessage(new ServerMessage(ServerCommands.ACCEPT_INT0_ROOM, null));
             }
 
         }
@@ -61,29 +77,18 @@ public class Room implements Runnable {
                             .append(users.size())
             );
         }
-    }
-
-    @Override
-    public void run() {
-        isRunning.set(true);
-        while (isRunning.get()) {
-            catchDeadUsers();
-            try {
-                Thread.sleep(1 * 1000);
-            } catch (InterruptedException e) {
-                log.error(e);
-            }
-
-        }
+        lastUserRemoval = Instant.now();
     }
 
     private void catchDeadUsers() {
+        if (Duration.between(lastDeadUserCheck, Instant.now()).toSeconds() < Globals.DEAD_USERS_CHECK_INTERVAL_SECONDS)
+            return;
+
         synchronized (users) {
             Iterator<User> uIt = users.iterator();
             while (uIt.hasNext()) {
                 User u = uIt.next();
-                boolean shouldDelete = false;
-                shouldDelete = u.isDead();
+                boolean shouldDelete = u.isDead();
 
                 if (!shouldDelete) {
                     try {
@@ -98,6 +103,8 @@ public class Room implements Runnable {
                     removeUser(u);
             }
         }
+
+        lastDeadUserCheck = Instant.now();
     }
 
     private void receiveMessages() {
@@ -114,8 +121,19 @@ public class Room implements Runnable {
         switch (message.getClientCommand()) {
             case POKE, SET_NICKNAME, JOIN_CREATE_ROOM -> {}
             case SEND_IMAGE -> {}
-            case DISCONNECT -> { removeUser(sender); }
+            case DISCONNECT -> removeUser(sender);
         }
+    }
+
+    private void preventLinger() {
+        Instant now = Instant.now();
+        Duration timeSinceLastRemoval = Duration.between(lastUserRemoval, now);
+
+        if (users.isEmpty() && timeSinceLastRemoval.toMinutes() >= Globals.MAX_ROOM_LINGER_MINUTES) {
+            isRunning.set(false);
+            log.info(new StringBuilder("Room \"").append(name).append("\" set to stop"));
+        }
+
     }
 
     // Getters & Setters
