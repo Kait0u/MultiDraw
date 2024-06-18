@@ -8,6 +8,7 @@ import wit.pap.multidraw.shared.communication.ServerMessage;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -88,6 +89,10 @@ public class TCPHandler extends Thread {
         if (this.inputStream != null) {
             try {
                 return (ServerMessage) this.inputStream.readObject();
+            } catch (SocketException e) {
+                this.running.set(false);
+                e.printStackTrace();
+                stopHandler();
             } catch (SocketTimeoutException e) {
 
             } catch (IOException | ClassNotFoundException e) {

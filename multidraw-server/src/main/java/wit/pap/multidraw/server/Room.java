@@ -116,6 +116,13 @@ public class Room implements Runnable {
                     messageRecipients.remove(msg);
                 }
             }
+
+            try {
+                user.close();
+            } catch (IOException e) {
+                log.error(e);
+            }
+
             log.info(
                     new StringBuilder("User ")
                             .append(user.getNickname())

@@ -82,6 +82,12 @@ public class User {
         }
     }
 
+    public void close() throws IOException {
+        if (out != null) out.close();
+        if (in != null) in.close();
+        if (socket != null) socket.close();
+    }
+
     @Override
     public String toString() {
         return new StringBuilder("USER {")
