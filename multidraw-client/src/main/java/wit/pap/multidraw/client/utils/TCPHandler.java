@@ -5,21 +5,21 @@ import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.Message;
 import wit.pap.multidraw.shared.communication.ServerMessage;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TCPHandler extends Thread {
     private Socket socket;
-    private ObjectOutputStream outputStream;
-    private ObjectInputStream inputStream;
+    private final ObjectOutputStream outputStream;
+    private final ObjectInputStream inputStream;
 
-    private final Queue<Message> messagesToSend;
+    private final Queue<ClientMessage> messagesToSend;
+    private final Queue<ServerMessage> messagesToHandle;
     private final AtomicBoolean running;
 
     public TCPHandler(String serverAddress, int serverPort) throws IOException {
@@ -28,10 +28,13 @@ public class TCPHandler extends Thread {
 
     public TCPHandler(InetAddress serverAddress, int serverPort) throws IOException {
         this.socket = new Socket(serverAddress, serverPort);
-        this.outputStream = new ObjectOutputStream(socket.getOutputStream());
-        this.inputStream = new ObjectInputStream(socket.getInputStream());
+        this.socket.setSoTimeout(2500);
+        this.outputStream = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+        this.outputStream.flush();
+        this.inputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 
         this.messagesToSend = new ConcurrentLinkedQueue<>();
+        this.messagesToHandle = new ConcurrentLinkedQueue<>();
         this.running = new AtomicBoolean(false);
     }
 
@@ -41,21 +44,37 @@ public class TCPHandler extends Thread {
         this.running.set(true);
         try {
             while (this.running.get()) {
+//                System.out.println("Sending...");
                 sendMessages();
+//                System.out.println("Sent!");
+//                System.out.println("Receiving...");
+                receiveMessages();
+//                System.out.println("Received!");
+//                System.out.println("Handling...");
+                handleMessages();
+//                System.out.println("Handled!");
             }
         } finally {
             close();
         }
     }
 
-    public synchronized void queueMessage(Message message) {
+    public synchronized void queueMessage(ClientMessage message) {
         messagesToSend.offer(message); // Using offer() for thread-safe addition to the queue
         notify();
     }
 
-    private synchronized void sendMessage(Message message) throws IOException {
-        outputStream.writeObject(message);
-        outputStream.flush();
+    public synchronized void queueMessages(ClientMessage... messages) {
+        for (ClientMessage m: messages) {
+            queueMessage(m);
+        }
+    }
+
+    private void sendMessage(Message message) throws IOException {
+        synchronized (outputStream) {
+            outputStream.writeObject(message);
+            outputStream.flush();
+        }
     }
 
     private synchronized void sendMessages() {
@@ -75,6 +94,8 @@ public class TCPHandler extends Thread {
         if (this.inputStream != null) {
             try {
                 return (ServerMessage) this.inputStream.readObject();
+            } catch (SocketTimeoutException e) {
+
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Uh oh!");
             }
@@ -84,26 +105,60 @@ public class TCPHandler extends Thread {
     }
 
     public ServerMessage receiveMessageOrNull() {
-        if (this.inputStream != null) {
+        if (this.inputStream == null)
+            return null;
+
+        synchronized (inputStream) {
             try {
-                if (this.inputStream.available() > 0) {
-                    return (ServerMessage) this.inputStream.readObject();
-                }
+                if (inputStream.available() <= 0)
+                    return null;
+                else
+                    return (ServerMessage) inputStream.readObject();
+
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Uh oh!");
+                throw new RuntimeException(e);
             }
         }
-        return null;
+
+//        return null;
+    }
+
+    private void receiveMessages() {
+        if (this.inputStream == null) return;
+
+        ServerMessage message = null;
+        do {
+            message = receiveMessage();
+
+            if (message != null) {
+                System.out.println(message);
+                synchronized (messagesToHandle) {
+                    messagesToHandle.offer(message);
+                }
+            }
+
+        } while (message != null);
     }
 
     private void handleMessage(ServerMessage message) {
         switch (message.getServerCommand()) {
-            case POKE -> {}
+            case POKE -> {
+                System.out.println("Poked!");
+            }
             case ACCEPT_INT0_ROOM -> {
                 System.out.println("Yay!");
             }
             case REJECT_FROM_ROOM -> {
                 System.out.println("Nay!");
+            }
+        }
+    }
+
+    private void handleMessages() {
+        synchronized (messagesToHandle) {
+            while (!messagesToHandle.isEmpty()) {
+                ServerMessage message = messagesToHandle.poll();
+                handleMessage(message);
             }
         }
     }

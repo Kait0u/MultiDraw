@@ -156,10 +156,13 @@ public class MultiDrawApplication extends Application {
             String roomName = tfRoom.getText();
 
             tcpHandler = new TCPHandler(address, port);
-            tcpHandler.start();
 
-            tcpHandler.queueMessage(new ClientMessage(ClientCommands.SET_NICKNAME, nicknmame.getBytes()));
-            tcpHandler.queueMessage(new ClientMessage(ClientCommands.JOIN_CREATE_ROOM, roomName.getBytes()));
+            tcpHandler.queueMessages(
+                    new ClientMessage(ClientCommands.SET_NICKNAME, nicknmame.getBytes()),
+                    new ClientMessage(ClientCommands.JOIN_CREATE_ROOM, roomName.getBytes())
+            );
+
+            tcpHandler.start();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {

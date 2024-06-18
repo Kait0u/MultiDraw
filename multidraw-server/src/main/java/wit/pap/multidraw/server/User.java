@@ -2,13 +2,12 @@ package wit.pap.multidraw.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import wit.pap.multidraw.shared.communication.ClientCommands;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.ServerCommands;
 import wit.pap.multidraw.shared.communication.ServerMessage;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,9 +28,9 @@ public class User {
         this.isDead = new AtomicBoolean(false);
 
         try {
-            out = new ObjectOutputStream(this.socket.getOutputStream());
+            out = new ObjectOutputStream(new BufferedOutputStream(this.socket.getOutputStream()));
             out.flush();
-            in = new ObjectInputStream(this.socket.getInputStream());
+            in = new ObjectInputStream(new BufferedInputStream(this.socket.getInputStream()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,7 +46,11 @@ public class User {
 
     public ClientMessage receiveMessage() {
         try {
-            return (ClientMessage) in.readObject();
+            synchronized (in) {
+                ClientMessage msg = (ClientMessage) in.readObject();
+                log.info(new StringBuilder("[").append(this).append("] Message received: ").append(msg));
+                return msg;
+            }
         } catch (IOException | ClassNotFoundException e) {
             log.error(e);
             this.isDead.set(true);
@@ -56,29 +59,29 @@ public class User {
         return null;
     }
 
-    public ClientMessage receiveMessageOrNull() {
+    public void sendMessage(ServerMessage message) {
+        if (message == null || out == null) return;
+
         try {
-            if (in.available() > 0) {
-                return receiveMessage();
+            synchronized (out) {
+                out.writeObject(message);
+                out.flush();
             }
+            log.info(new StringBuilder("[").append(this).append("] Sent message: ").append(message));
         } catch (IOException e) {
             log.error(e);
             this.isDead.set(true);
         }
-
-        return null;
     }
 
-    public void sendMessage(ServerMessage message) {
-        if (message == null) return;
-
-        try {
-            out.writeObject(message);
-            log.info(new StringBuilder("Sent message ").append(message));
-        } catch (IOException e) {
-            log.error(e);
-            this.isDead.set(true);
-        }
+    @Override
+    public String toString() {
+        return new StringBuilder("USER {")
+                .append(room == null ? "<NO ROOM>" : room.getName())
+                .append("/")
+                .append(nickname == null ? "<NO NICKNAME | " + socket.getInetAddress() + ">" : nickname)
+                .append("}")
+                .toString();
     }
 
     // Getters & Setters
@@ -106,10 +109,15 @@ public class User {
     public void setRoom(Room room) throws DuplicateNicknameException {
         try {
             room.addUser(this);
+            synchronized (out) {
+                out.reset();
+            }
         } catch (DuplicateNicknameException e) {
             log.error(e);
             sendMessage(new ServerMessage(ServerCommands.REJECT_FROM_ROOM, e.getMessage().getBytes()));
             throw e;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         this.room = room;
     }

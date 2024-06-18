@@ -18,7 +18,7 @@ public class MultiDrawServer {
     private final ServerSocket serverSocket;
     private boolean isRunning = false;
 
-    private final Set<User> users;
+//    private final Set<User> users;
     private final Set<Room> rooms;
     private final Map<String, Room> nameRoomMap;
     private final Map<Room, Thread> roomThreadMap;
@@ -34,7 +34,7 @@ public class MultiDrawServer {
         this.rooms = new HashSet<>();
         this.nameRoomMap = new HashMap<>();
         this.roomThreadMap = new HashMap<>();
-        this.users = new HashSet<>();
+//        this.users = new HashSet<>();
         this.toBeUsers = new ConcurrentLinkedQueue<>();
     }
 
@@ -93,9 +93,9 @@ public class MultiDrawServer {
             try {
                 user.setNickname(nickname);
                 user.setRoom(room);
-                synchronized (users) {
-                    users.add(user);
-                }
+//                synchronized (users) {
+//                    users.add(user);
+//                }
                 log.info(new StringBuilder(socket.getInetAddress().toString())
                         .append(" became User ").append(nickname).append(" in room ").append(roomName));
             } catch (DuplicateNicknameException e) {

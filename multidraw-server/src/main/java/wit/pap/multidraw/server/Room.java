@@ -57,7 +57,7 @@ public class Room implements Runnable {
             log.info(
                     new StringBuilder("User ")
                             .append(user.getNickname())
-                            .append("left the Room ").append(name).append(". Current user count: ")
+                            .append(" left the Room ").append(name).append(". Current user count: ")
                             .append(users.size())
             );
         }
@@ -68,6 +68,11 @@ public class Room implements Runnable {
         isRunning.set(true);
         while (isRunning.get()) {
             catchDeadUsers();
+            try {
+                Thread.sleep(1 * 1000);
+            } catch (InterruptedException e) {
+                log.error(e);
+            }
 
         }
     }

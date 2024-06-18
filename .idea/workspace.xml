@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Rooms now start after creation.">
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Fixed establishing whether the user is dead or not.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +149,7 @@
       <workItem from="1718615516154" duration="10275000" />
       <workItem from="1718645733123" duration="16436000" />
       <workItem from="1718665705329" duration="903000" />
-      <workItem from="1718697473728" duration="2613000" />
+      <workItem from="1718697473728" duration="13075000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -414,7 +415,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718702330660</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Fixed establishing whether the user is dead or not.">
+      <option name="closed" value="true" />
+      <created>1718703621047</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1718703621047</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -432,7 +441,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added a separate Main function to be an entrypoint." />
     <MESSAGE value="Added a separate Main function to be an entrypoint, done some refactorization." />
     <MESSAGE value="Created a PannableScrollPane" />
     <MESSAGE value="Simplified a button" />
@@ -457,7 +465,8 @@
     <MESSAGE value="Started room-side message handling" />
     <MESSAGE value="Fixed a return statement's position." />
     <MESSAGE value="Rooms now start after creation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Rooms now start after creation." />
+    <MESSAGE value="Fixed establishing whether the user is dead or not." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed establishing whether the user is dead or not." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
