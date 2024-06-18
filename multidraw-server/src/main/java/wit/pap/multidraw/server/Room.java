@@ -84,6 +84,7 @@ public class Room implements Runnable {
                     try {
                         u.sendMessage(new ServerMessage(ServerCommands.POKE, null));
                     } catch (Exception e) {
+                        log.error(e);
                         shouldDelete = true;
                     }
                 }

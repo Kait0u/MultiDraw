@@ -8,6 +8,11 @@ public class ClientMessage extends Message {
         this.clientCommand = command;
     }
 
+    @Override
+    public String toString() {
+        return (new StringBuilder(clientCommand.name()).append(" ").append(new String(payload)).toString());
+    }
+
     // Getters & Setters
 
     public ClientCommands getClientCommand() {

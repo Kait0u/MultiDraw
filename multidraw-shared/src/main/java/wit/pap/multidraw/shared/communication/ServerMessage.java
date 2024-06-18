@@ -8,8 +8,12 @@ public class ServerMessage extends Message {
         this.serverCommand = command;
     }
 
-    // Getters & Setters
+    @Override
+    public String toString() {
+        return (new StringBuilder(this.serverCommand.name()).append(" ").append(new String(payload)).toString());
+    }
 
+    // Getters & Setters
 
     public ServerCommands getServerCommand() {
         return serverCommand;

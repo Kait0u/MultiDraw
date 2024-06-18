@@ -3,8 +3,8 @@ package wit.pap.multidraw.shared.communication;
 import java.io.Serializable;
 
 public abstract class Message implements Serializable {
-    private int length;
-    private byte[] payload;
+    protected int length;
+    protected byte[] payload;
 
     public Message(byte[] payload, int length) {
         if (payload != null) {
@@ -18,7 +18,10 @@ public abstract class Message implements Serializable {
     }
 
     public Message(byte[] payload) {
-        this(payload, payload.length);
+        this(
+                payload == null ? new byte[0] : payload,
+                payload == null ? 0 : payload.length
+        );
     }
 
     // Getters & Setters
