@@ -3,11 +3,12 @@ package wit.pap.multidraw.shared;
 import javafx.scene.image.*;
 import wit.pap.multidraw.shared.globals.Globals;
 
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-public class BgraImage {
+public class BgraImage implements Serializable {
     private byte[] imageArr;
     int width, height;
 
@@ -89,6 +90,17 @@ public class BgraImage {
         );
 
         return image;
+    }
+
+    public static BgraImage createTransparent(int imageWidth, int imageHeight) {
+        BgraImage result = new BgraImage(imageWidth, imageHeight);
+        result.setAllBGRA(
+                (byte) Globals.MIN_PIXEL,
+                (byte) Globals.MIN_PIXEL,
+                (byte) Globals.MIN_PIXEL,
+                (byte) Globals.MIN_PIXEL
+        );
+        return result;
     }
 
     public static BgraImage fromFXImage(Image img) {
