@@ -1,7 +1,11 @@
 package wit.pap.multidraw.client.gui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -17,6 +22,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
 
+import javafx.util.Duration;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.client.utils.TCPHandler;
@@ -29,9 +35,13 @@ import wit.pap.multidraw.shared.communication.Message;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MultiDrawApplication extends Application {
     Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
+    HBox connectionForm;
     TextField tfHost, tfHostPort, tfNickname, tfRoom;
     Spinner<Integer> spnPenSize;
     ColorPicker colorPicker;
@@ -49,33 +59,26 @@ public class MultiDrawApplication extends Application {
         Scene scene = new Scene(root);
 
         ToolBar toolBar = new ToolBar(
-//                btnPauseResume = new Button("Pause"),
                 btnSave = new Button("Save"),
                 new Separator(Orientation.VERTICAL),
-                colorPicker = new ColorPicker(Color.BLACK),
-                new Pane(),
-
-                new Label("Pen Size: "),
-                spnPenSize = new Spinner<Integer>() {{
-                    setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                            1, 50, 5
-                    ));
-                    setPrefWidth(80);
+                connectionForm = new HBox() {{
+                    setSpacing(5);
+                    setAlignment(Pos.CENTER);
+                    getChildren().addAll(
+                            new Label("Host: "),
+                            tfHost = new TextField(),
+                            new Label("Port: "),
+                            tfHostPort = new TextField() {{
+                                setPrefWidth(80);
+                            }},
+                            new Label("Nickname: "),
+                            tfNickname = new TextField(),
+                            new Label("Room ID: "),
+                            tfRoom = new TextField()
+                    );
                 }},
-                new Pane(),
-                btnClear = new Button("Clear"),
-                new Separator(Orientation.VERTICAL),
-                new Label("Host: "),
-                tfHost = new TextField(),
-                new Label("Port: "),
-                tfHostPort = new TextField() {{
-                    setPrefWidth(80);
-                }},
-                new Label("Nickname: "),
-                tfNickname = new TextField(),
-                new Label("Room ID: "),
-                tfRoom = new TextField(),
                 btnConnectDisconnect = new Button("Connect")
+
 
         );
         root.getChildren().add(toolBar);
@@ -111,15 +114,29 @@ public class MultiDrawApplication extends Application {
             }
         });
 
-        btnClear.setOnAction(event -> clearCanvas());
-
-        btnConnectDisconnect.setOnAction(event -> connect());
-
-
         PannableScrollPane scrollPane = new PannableScrollPane();
         scrollPane.setContent(imageStack);
         root.getChildren().add(scrollPane);
 
+        ToolBar toolBarBottom = new ToolBar(
+                colorPicker = new ColorPicker(Color.BLACK),
+                new Pane(),
+
+                new Label("Size: "),
+                spnPenSize = new Spinner<Integer>() {{
+                    setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                            1, 50, 5
+                    ));
+                    setPrefWidth(80);
+                }},
+                new Pane(),
+                btnClear = new Button("Clear")
+        );
+
+        root.getChildren().add(toolBarBottom);
+
+        btnClear.setOnAction(event -> clearCanvas());
+        btnConnectDisconnect.setOnAction(event -> connect());
 
         primaryStage.setTitle("MultiDraw");
         primaryStage.getIcons().add(new Image(MultiDrawApplication.class.getResourceAsStream("/icon.png")));
@@ -163,6 +180,10 @@ public class MultiDrawApplication extends Application {
             );
 
             tcpHandler.start();
+            connectionForm.setDisable(true);
+            btnConnectDisconnect.setText("Disconnect");
+            btnConnectDisconnect.setOnAction(e -> disconnect());
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -173,6 +194,15 @@ public class MultiDrawApplication extends Application {
     private void disconnect() {
         tcpHandler.stopHandler();
         tcpHandler = null;
+
+        Timeline timeline = new Timeline (
+            new KeyFrame(Duration.seconds(5), evt -> {
+                connectionForm.setDisable(false);
+                btnConnectDisconnect.setText("Connect");
+                btnConnectDisconnect.setOnAction(e -> connect());
+            }));
+
+        timeline.play();
     }
 
     // ---------
