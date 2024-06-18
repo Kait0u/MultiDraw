@@ -20,4 +20,5 @@ public class Globals {
     public static final int DEAD_USERS_CHECK_INTERVAL_SECONDS = 20;
     public static final int DEAD_ROOM_CHECK_INTERVAL_SECONDS = 20;
     public static final int MAX_ROOM_LINGER_MINUTES = 1;
+    public static final int MIDDLEGROUND_CREATION_INTERVAL_SECONDS = 5;
 }

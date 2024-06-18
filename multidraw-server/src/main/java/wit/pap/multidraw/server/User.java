@@ -10,6 +10,7 @@ import wit.pap.multidraw.shared.communication.ServerMessage;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class User {
@@ -56,6 +57,8 @@ public class User {
                 log.info(new StringBuilder("[").append(this).append("] Message received: ").append(msg));
                 return msg;
             }
+        } catch (SocketTimeoutException e) {
+
         } catch (IOException | ClassNotFoundException e) {
             log.error(e);
             this.isDead.set(true);
