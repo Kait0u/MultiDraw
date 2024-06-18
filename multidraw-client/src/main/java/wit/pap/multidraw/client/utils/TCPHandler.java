@@ -28,7 +28,7 @@ public class TCPHandler extends Thread {
 
     public TCPHandler(InetAddress serverAddress, int serverPort) throws IOException {
         this.socket = new Socket(serverAddress, serverPort);
-        this.socket.setSoTimeout(2500);
+        this.socket.setSoTimeout(400);
         this.outputStream = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
         this.outputStream.flush();
         this.inputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
