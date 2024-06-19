@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Improved handling dead users.">
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Added save to PNG. Minor improvements.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/widgets/LayeredImageStack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,32 +46,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Client Main.executor": "Run",
-    "Application.HelloApplication.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.MultiDrawApplication.executor": "Run",
-    "Application.Server Debug.executor": "Debug",
-    "Application.Server Main.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "21",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/jjaws/IdeaProjects/multidraw/multidraw-client/src/main/java/wit/pap/multidraw/client",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Client Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MultiDrawApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server Debug.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Server Main.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jjaws/IdeaProjects/multidraw/multidraw-client/src/main/java/wit/pap/multidraw/client&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\jjaws\IdeaProjects\multidraw\multidraw-client\src\main\java\wit\pap\multidraw\client" />
@@ -150,23 +145,8 @@
       <workItem from="1718645733123" duration="16436000" />
       <workItem from="1718665705329" duration="903000" />
       <workItem from="1718697473728" duration="49726000" />
-      <workItem from="1718787621624" duration="7510000" />
-    </task>
-    <task id="LOCAL-00006" summary="Defined some basic Client Commands">
-      <option name="closed" value="true" />
-      <created>1718401466300</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1718401466300</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Removed unnecessary files.">
-      <option name="closed" value="true" />
-      <created>1718401500197</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1718401500197</updated>
+      <workItem from="1718787621624" duration="7978000" />
+      <workItem from="1718810153725" duration="110000" />
     </task>
     <task id="LOCAL-00008" summary="Added a LayeredImage class stub.">
       <option name="closed" value="true" />
@@ -544,7 +524,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718789418282</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Minor improvements.">
+      <option name="closed" value="true" />
+      <created>1718797427273</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1718797427273</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Added save to PNG. Minor improvements.">
+      <option name="closed" value="true" />
+      <created>1718797452542</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1718797452543</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -562,8 +558,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed a sudden, random collapse of the whole project. Reason unknown." />
-    <MESSAGE value="Started room-side message handling" />
     <MESSAGE value="Fixed a return statement's position." />
     <MESSAGE value="Rooms now start after creation." />
     <MESSAGE value="Fixed establishing whether the user is dead or not." />
@@ -587,7 +581,9 @@
     <MESSAGE value="Added compression and improved disconnecting and synchronization." />
     <MESSAGE value="Added an About button and its functionality." />
     <MESSAGE value="Improved handling dead users." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved handling dead users." />
+    <MESSAGE value="Minor improvements." />
+    <MESSAGE value="Added save to PNG. Minor improvements." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added save to PNG. Minor improvements." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
