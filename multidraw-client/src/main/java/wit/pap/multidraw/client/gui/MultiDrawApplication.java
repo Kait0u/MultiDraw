@@ -22,8 +22,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import wit.pap.multidraw.client.gui.utilities.Alerts;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
@@ -169,6 +171,7 @@ public class MultiDrawApplication extends Application {
 
         root.getChildren().add(toolBarBottom);
 
+        btnAbout.setOnAction(event -> showAboutWindow(primaryStage));
         btnClear.setOnAction(event -> clearCanvas());
         btnConnectDisconnect.setOnAction(event -> connect());
 
@@ -257,7 +260,8 @@ public class MultiDrawApplication extends Application {
     }
 
     private void stopHandler() {
-        tcpHandler.stopHandler();
+        if (tcpHandler != null)
+            tcpHandler.stopHandler();
     }
 
     private void freeForm() {
@@ -287,6 +291,48 @@ public class MultiDrawApplication extends Application {
             finalTcpHandler.setImage(image);
             return null;
         }, snapshotParameters, img);
+    }
+
+    private void showAboutWindow(Stage owner) {
+        Stage aboutStage = new Stage();
+
+        aboutStage.initOwner(owner);
+        aboutStage.initModality(Modality.WINDOW_MODAL);
+        aboutStage.initStyle(StageStyle.UTILITY);
+        aboutStage.setTitle("About");
+
+        Image image = new Image(MultiDrawApplication.class.getResourceAsStream("/icon_big.png"));
+        ImageView imageView = new ImageView(image);
+
+        Label headerLabel = new Label("MultiDraw");
+        headerLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label infoLabel = new Label(
+                new StringBuilder("A client-server app that allows users to draw on a whiteboard together.")
+                .append("\n")
+                .append("\nCredit project for Client-Server Programming class.")
+                .append("\n\n")
+                .append("Author: Kait0u (Jakub Jaworski [20318])")
+                .append("\n")
+                .append("Icon by: Nexonus (Jan Konarski)")
+                .append("\n")
+                .append("2024 - WIT Academy, Warsaw")
+                .toString()
+        );
+
+        infoLabel.setStyle("-fx-text-alignment: center;");
+
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> aboutStage.close());
+
+        VBox layout = new VBox(10);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(imageView, headerLabel, infoLabel, okButton);
+
+        Scene scene = new Scene(layout, 400, 400);
+        aboutStage.setScene(scene);
+        aboutStage.setResizable(false);
+        aboutStage.showAndWait();
     }
 
     // ---------
