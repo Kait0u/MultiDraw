@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -37,6 +38,7 @@ import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.globals.Globals;
 import wit.pap.multidraw.shared.LayeredImage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -44,21 +46,24 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class MultiDrawApplication extends Application {
-    Button btnAbout, btnSave, btnClear, btnConnectDisconnect;
-    HBox connectionForm;
-    TextField tfHost, tfHostPort, tfNickname, tfRoom;
-    Spinner<Integer> spnPenSize;
-    ColorPicker colorPicker;
+    private Stage primaryStage;
+    private Button btnAbout, btnSave, btnClear, btnConnectDisconnect;
+    private HBox connectionForm;
+    private TextField tfHost, tfHostPort, tfNickname, tfRoom;
+    private Spinner<Integer> spnPenSize;
+    private ColorPicker colorPicker;
 
-    LayeredImage layeredImage;
-    LayeredImageStack imageStack;
-    Canvas canvas;
-    ImageView bgImageView, mgImageView;
+    private LayeredImage layeredImage;
+    private LayeredImageStack imageStack;
+    private Canvas canvas;
+    private ImageView bgImageView, mgImageView;
 
     TCPHandler tcpHandler;
 
+
     @Override
     public void start(Stage primaryStage) throws IOException {
+        this.primaryStage = primaryStage;
         VBox root = new VBox();
         Scene scene = new Scene(root);
 
@@ -171,6 +176,7 @@ public class MultiDrawApplication extends Application {
 
         root.getChildren().add(toolBarBottom);
 
+        btnSave.setOnAction(event -> savePNG());
         btnAbout.setOnAction(event -> showAboutWindow(primaryStage));
         btnClear.setOnAction(event -> clearCanvas());
         btnConnectDisconnect.setOnAction(event -> connect());
@@ -187,7 +193,13 @@ public class MultiDrawApplication extends Application {
 
     @Override
     public void stop() {
-        stopHandler();
+        if (!tcpHandler.getIsConnectionDead()) {
+            stopHandler();
+        } else {
+            try {
+                tcpHandler.interrupt();
+            } catch (Exception ignored) { }
+        }
     }
 
     private void clearCanvas() {
@@ -231,10 +243,8 @@ public class MultiDrawApplication extends Application {
             clearCanvas();
 
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Alerts.showErrorAlert(e.toString(), e.getMessage());
         }
     }
 
@@ -291,6 +301,20 @@ public class MultiDrawApplication extends Application {
             finalTcpHandler.setImage(image);
             return null;
         }, snapshotParameters, img);
+    }
+
+    public void savePNG() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save As PNG");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File outFile = fileChooser.showSaveDialog(primaryStage);
+        if (outFile != null) {
+            synchronized (imageStack) {
+                imageStack.saveAsPNG(outFile);
+            }
+        }
     }
 
     private void showAboutWindow(Stage owner) {
