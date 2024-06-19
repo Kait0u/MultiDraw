@@ -114,7 +114,6 @@ public class BgraImage implements Serializable {
         for (int y = 0, index = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 int argb = pixelReader.getArgb(x, y);
-                System.out.println(Integer.toString(index)+ " " + Integer.toString(argb));
                 byteArray[index++] = (byte) (argb & 0xFF);         // Blue
                 byteArray[index++] = (byte) ((argb >> 8) & 0xFF);  // Green
                 byteArray[index++] = (byte) ((argb >> 16) & 0xFF); // Red
