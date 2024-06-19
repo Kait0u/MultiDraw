@@ -20,6 +20,9 @@ public class Globals {
     public static final int DEAD_USERS_CHECK_INTERVAL_SECONDS = 20;
     public static final int DEAD_ROOM_CHECK_INTERVAL_SECONDS = 20;
     public static final int MAX_ROOM_LINGER_MINUTES = 1;
-    public static final int CANVAS_SNAPSHOT_INTERVAL_SECONDS = 5;
+    public static final int CANVAS_SNAPSHOT_INTERVAL_SECONDS = 2;
     public static final int MIDDLEGROUND_CREATION_INTERVAL_SECONDS = 5;
+    public static final String BYTESTRING_INFO = "<...BYTES...>";
+    public static final int MAX_NICKNAME_LENGTH = 32;
+    public static final int MAX_ROOMNAME_LENGTH = 32;
 }

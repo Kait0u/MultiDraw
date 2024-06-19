@@ -8,7 +8,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.SnapshotResult;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -25,7 +24,6 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
 
-import javafx.util.Callback;
 import javafx.util.Duration;
 import wit.pap.multidraw.client.gui.utilities.Alerts;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
@@ -40,9 +38,11 @@ import wit.pap.multidraw.shared.LayeredImage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class MultiDrawApplication extends Application {
-    Button btnPauseResume, btnSave, btnClear, btnConnectDisconnect;
+    Button btnAbout, btnSave, btnClear, btnConnectDisconnect;
     HBox connectionForm;
     TextField tfHost, tfHostPort, tfNickname, tfRoom;
     Spinner<Integer> spnPenSize;
@@ -62,6 +62,7 @@ public class MultiDrawApplication extends Application {
 
         ToolBar toolBar = new ToolBar(
                 btnSave = new Button("Save"),
+                btnAbout = new Button("About"),
                 new Separator(Orientation.VERTICAL),
                 connectionForm = new HBox() {{
                     setSpacing(5);
@@ -72,11 +73,42 @@ public class MultiDrawApplication extends Application {
                             new Label("Port: "),
                             tfHostPort = new TextField() {{
                                 setPrefWidth(80);
+
+                                Pattern validPattern = Pattern.compile("[0-9]*");
+                                setTextFormatter(new TextFormatter<>(change -> {
+                                    String newText = change.getControlNewText();
+                                    if (validPattern.matcher(newText).matches())
+                                        return change;
+                                    return null;
+                                }));
                             }},
                             new Label("Nickname: "),
-                            tfNickname = new TextField(),
+                            tfNickname = new TextField() {{
+                                Pattern validPattern = Pattern.compile("[a-zA-Z0-9_]*");
+                                setTextFormatter(new TextFormatter<>(change -> {
+                                    String newText = change.getControlNewText();
+                                    if (newText.length() > Globals.MAX_NICKNAME_LENGTH)
+                                        return null;
+                                    if (validPattern.matcher(newText).matches())
+                                        return change;
+
+                                    return null;
+                                }));
+
+                            }},
                             new Label("Room ID: "),
-                            tfRoom = new TextField()
+                            tfRoom = new TextField() {{
+                                Pattern validPattern = Pattern.compile("[a-zA-Z0-9_]*");
+                                setTextFormatter(new TextFormatter<>(change -> {
+                                    String newText = change.getControlNewText();
+                                    if (newText.length() > Globals.MAX_ROOMNAME_LENGTH)
+                                        return null;
+                                    if (validPattern.matcher(newText).matches())
+                                        return change;
+
+                                    return null;
+                                }));
+                            }}
                     );
                 }},
                 btnConnectDisconnect = new Button("Connect")
@@ -150,6 +182,11 @@ public class MultiDrawApplication extends Application {
         primaryStage.show();
     }
 
+    @Override
+    public void stop() {
+        stopHandler();
+    }
+
     private void clearCanvas() {
         if (canvas != null) {
             canvas.getGraphicsContext2D().clearRect(0,  0, canvas.getWidth(), canvas.getHeight());
@@ -215,8 +252,12 @@ public class MultiDrawApplication extends Application {
     }
 
     private void disconnect() {
-        tcpHandler.stopHandler();
+        stopHandler();
         freeForm();
+    }
+
+    private void stopHandler() {
+        tcpHandler.stopHandler();
     }
 
     private void freeForm() {

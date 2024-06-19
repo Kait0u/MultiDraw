@@ -1,5 +1,9 @@
 package wit.pap.multidraw.shared.communication;
 
+import wit.pap.multidraw.shared.globals.Globals;
+
+import java.nio.charset.StandardCharsets;
+
 public class ClientMessage extends Message {
     private ClientCommands clientCommand;
 
@@ -10,7 +14,11 @@ public class ClientMessage extends Message {
 
     @Override
     public String toString() {
-        return (new StringBuilder(clientCommand.name()).append(" ").append(new String(payload)).toString());
+        String payloadAsString = new String(payload);
+        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(payloadAsString))
+            payloadAsString = Globals.BYTESTRING_INFO;
+
+        return (new StringBuilder(this.clientCommand.name()).append(" ").append(payloadAsString).toString());
     }
 
     // Getters & Setters

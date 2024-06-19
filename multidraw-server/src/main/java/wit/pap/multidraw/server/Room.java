@@ -11,6 +11,7 @@ import wit.pap.multidraw.shared.communication.ServerMessage;
 import wit.pap.multidraw.shared.globals.Globals;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.security.InvalidParameterException;
 import java.time.Duration;
 import java.time.Instant;
@@ -98,7 +99,12 @@ public class Room implements Runnable {
                 synchronized (userImages) {
                     userImages.put(user, BgraImage.createTransparent(Globals.IMAGE_WIDTH, Globals.IMAGE_HEIGHT));
                 }
-                user.sendMessage(new ServerMessage(ServerCommands.ACCEPT_INT0_ROOM, null));
+                try {
+                    user.sendMessage(new ServerMessage(ServerCommands.ACCEPT_INT0_ROOM, null));
+                } catch (SocketException e) {
+                    log.error(e);
+                    removeUser(user);
+                }
             }
 
         }
@@ -169,31 +175,37 @@ public class Room implements Runnable {
     }
 
     private void receiveMessages() {
-        if (users.isEmpty()) {
-            log.info(new StringBuilder("Room \"").append(name).append("\" has no users to receive messages from!"));
-            return;
-        }
-
-        Set<ClientMessage> toAdd = new HashSet<>();
-        Map<ClientMessage, User> senders = new HashMap<>();
         synchronized (users) {
-            for (User u: users) {
-                ClientMessage message = u.receiveMessage();
-                if (message != null) {
-                    toAdd.add(message);
-                    senders.put(message, u);
+            if (users.isEmpty()) {
+                log.info(new StringBuilder("Room \"").append(name).append("\" has no users to receive messages from!"));
+                return;
+            }
+
+            Set<ClientMessage> toAdd = new HashSet<>();
+            Map<ClientMessage, User> senders = new HashMap<>();
+
+            for (User u : users) {
+                try {
+                    ClientMessage message = u.receiveMessage();
+                    if (message != null) {
+                        toAdd.add(message);
+                        senders.put(message, u);
+                    }
+                } catch (SocketException e) {
+                    log.error(e);
+                    removeUser(u);
                 }
             }
-        }
-        synchronized (messagesToHandle) {
-            messagesToHandle.addAll(toAdd);
-        }
-        synchronized (messageSenders) {
-            messageSenders.putAll(senders);
-        }
+            synchronized (messagesToHandle) {
+                messagesToHandle.addAll(toAdd);
+            }
+            synchronized (messageSenders) {
+                messageSenders.putAll(senders);
+            }
 
-        if (!toAdd.isEmpty()) {
-            log.info(new StringBuilder("Room \"").append(name).append("\": messages received!"));
+            if (!toAdd.isEmpty()) {
+                log.info(new StringBuilder("Room \"").append(name).append("\": messages received!"));
+            }
         }
     }
 
@@ -201,15 +213,15 @@ public class Room implements Runnable {
         if (Duration.between(lastImageMerge, Instant.now()).toSeconds() < Globals.MIDDLEGROUND_CREATION_INTERVAL_SECONDS)
             return;
 
-        if (users.isEmpty()) {
-            log.info(new StringBuilder("Room \"").append(name).append("\" has no users to prepare middleGrounds for!"));
-            return;
-        }
+        synchronized (users){
+            if (users.isEmpty()) {
+                log.info(new StringBuilder("Room \"").append(name).append("\" has no users to prepare middleGrounds for!"));
+                return;
+            }
 
-        Map<User, BgraImage> middleGrounds = new HashMap<>();
+            Map<User, BgraImage> middleGrounds = new HashMap<>();
 
-        synchronized (userImages) {
-            synchronized (users) {
+            synchronized (userImages) {
                 for (User destinationUser: users) {
                     List<BgraImage> sourceImagesTemp = userImages.entrySet()
                             .stream()
@@ -232,6 +244,7 @@ public class Room implements Runnable {
             }
         }
 
+
         log.info(new StringBuilder("Room \"").append(name).append("\" merged images into middlegrounds"));
 
         synchronized (messagesToSend) {
@@ -242,7 +255,7 @@ public class Room implements Runnable {
 
 
                     try {
-                        byte[] mgImageBytes = Utilities.serializeIntoBytes(mgImage);
+                        byte[] mgImageBytes = Utilities.serializeAndCompress(mgImage);
                         ServerMessage message = new ServerMessage(ServerCommands.SEND_MIDDLEGROUND, mgImageBytes);
                         messagesToSend.add(message);
                         messageRecipients.put(message, user);
@@ -258,10 +271,13 @@ public class Room implements Runnable {
     }
 
     private void sendMessages() {
-        if (users.isEmpty()) {
-            log.info(new StringBuilder("Room \"").append(name).append("\" has no users to send messages to!"));
-            return;
+        synchronized (users) {
+            if (users.isEmpty()) {
+                log.info(new StringBuilder("Room \"").append(name).append("\" has no users to send messages to!"));
+                return;
+            }
         }
+
 
         log.info(new StringBuilder("Room \"").append(name).append("\": sending messages..."));
         synchronized (messagesToSend) {
@@ -270,8 +286,14 @@ public class Room implements Runnable {
                     ServerMessage message = messagesToSend.poll();
                     User recipient = messageRecipients.get(message);
 
-                    recipient.sendMessage(message);
-                    messageRecipients.remove(message);
+                    try {
+                        recipient.sendMessage(message);
+                        messageRecipients.remove(message);
+                    } catch (SocketException e) {
+                        log.error(e);
+                        removeUser(recipient);
+                    }
+
                 }
             }
         }
@@ -305,10 +327,13 @@ public class Room implements Runnable {
         Instant now = Instant.now();
         Duration timeSinceLastRemoval = Duration.between(lastUserRemoval, now);
 
-        if (force || (users.isEmpty() && timeSinceLastRemoval.toMinutes() >= Globals.MAX_ROOM_LINGER_MINUTES)) {
-            isRunning.set(false);
-            log.info(new StringBuilder("Room \"").append(name).append("\" set to stop"));
+        synchronized (users) {
+            if (force || (users.isEmpty() && timeSinceLastRemoval.toMinutes() >= Globals.MAX_ROOM_LINGER_MINUTES)) {
+                isRunning.set(false);
+                log.info(new StringBuilder("Room \"").append(name).append("\" set to stop"));
+            }
         }
+
 
     }
 
@@ -317,8 +342,10 @@ public class Room implements Runnable {
     private void handleSendImage(User sender, ClientMessage message) {
         byte[] imageBytes = message.getPayload();
         try {
-            BgraImage image = (BgraImage) Utilities.deserializeIntoObject(imageBytes);
-            userImages.put(sender, image);
+            BgraImage image = (BgraImage) Utilities.decompressAndDeserialize(imageBytes);
+            synchronized (userImages) {
+                userImages.put(sender, image);
+            }
         } catch (IOException | ClassNotFoundException e) {
             log.error(e);
         }
@@ -334,3 +361,4 @@ public class Room implements Runnable {
         return isRunning.get();
     }
 }
+

@@ -191,7 +191,7 @@ public class TCPHandler extends Thread {
         cbGetCanvasImage.run();
         synchronized (image) {
             try {
-                byte[] imgBytes = Utilities.serializeIntoBytes(image);
+                byte[] imgBytes = Utilities.serializeAndCompress(image);
                 ClientMessage imgMessage = new ClientMessage(
                         ClientCommands.SEND_IMAGE,
                         imgBytes
@@ -253,7 +253,7 @@ public class TCPHandler extends Thread {
     private void handleSendMiddleGround(ServerMessage message) {
         byte[] imgBytes = message.getPayload();
         try {
-            BgraImage img = (BgraImage) Utilities.deserializeIntoObject(imgBytes);
+            BgraImage img = (BgraImage) Utilities.decompressAndDeserialize(imgBytes);
             if (cbSetMiddleGround != null) {
                 cbSetMiddleGround.accept(img);
             }

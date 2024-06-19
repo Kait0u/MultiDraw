@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="The app is usable - requires some fixes." />
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Got rid of old code.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/Utilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ClientMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/communication/ServerMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -142,23 +153,7 @@
       <workItem from="1718615516154" duration="10275000" />
       <workItem from="1718645733123" duration="16436000" />
       <workItem from="1718665705329" duration="903000" />
-      <workItem from="1718697473728" duration="44021000" />
-    </task>
-    <task id="LOCAL-00001" summary="Initial commit">
-      <option name="closed" value="true" />
-      <created>1718274640499</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1718274640499</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Added README.MD">
-      <option name="closed" value="true" />
-      <created>1718275221227</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1718275221227</updated>
+      <workItem from="1718697473728" duration="48783000" />
     </task>
     <task id="LOCAL-00003" summary="Assigned buttons and textfields to variables.">
       <option name="closed" value="true" />
@@ -536,7 +531,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718758211243</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Removed prints.">
+      <option name="closed" value="true" />
+      <created>1718758454764</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1718758454764</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Got rid of old code.">
+      <option name="closed" value="true" />
+      <created>1718758466536</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1718758466536</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -554,8 +565,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Revamped communications between the client and the server." />
-    <MESSAGE value="Client can now disconnect." />
     <MESSAGE value="Added nickname setting and roomName setting." />
     <MESSAGE value="User is now added to the set of users upon creation." />
     <MESSAGE value="Improved server room name lookup" />
@@ -579,7 +588,9 @@
     <MESSAGE value="Fixed disconnecting a little." />
     <MESSAGE value="Added a stub of a callback system." />
     <MESSAGE value="The app is usable - requires some fixes." />
-    <option name="LAST_COMMIT_MESSAGE" value="The app is usable - requires some fixes." />
+    <MESSAGE value="Removed prints." />
+    <MESSAGE value="Got rid of old code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Got rid of old code." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

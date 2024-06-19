@@ -50,7 +50,7 @@ public class User {
         }
     }
 
-    public ClientMessage receiveMessage() {
+    public ClientMessage receiveMessage() throws SocketException {
         try {
             synchronized (in) {
                 ClientMessage msg = (ClientMessage) in.readObject();
@@ -67,7 +67,7 @@ public class User {
         return null;
     }
 
-    public void sendMessage(ServerMessage message) {
+    public void sendMessage(ServerMessage message) throws SocketException {
         if (message == null || out == null) return;
 
         try {
@@ -128,10 +128,14 @@ public class User {
             }
         } catch (DuplicateNicknameException e) {
             log.error(e);
-            sendMessage(new ServerMessage(ServerCommands.REJECT_FROM_ROOM, e.getMessage().getBytes()));
+            try {
+                sendMessage(new ServerMessage(ServerCommands.REJECT_FROM_ROOM, e.getMessage().getBytes()));
+            } catch (SocketException ex) {
+                log.error(ex);
+            }
             throw e;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error(e);
         }
         this.room = room;
     }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -95,12 +96,17 @@ public class MultiDrawServer {
             String nickname = null, roomName = null;
 
             while (nickname == null || roomName == null) {
-                ClientMessage message = user.receiveMessage();
-                logClientMessage(socket.getInetAddress(), message);
+                try {
+                    ClientMessage message = user.receiveMessage();
+                    logClientMessage(socket.getInetAddress(), message);
 
-                switch (message.getClientCommand()) {
-                    case SET_NICKNAME -> nickname = new String(message.getPayload());
-                    case JOIN_CREATE_ROOM -> roomName = new String(message.getPayload());
+                    switch (message.getClientCommand()) {
+                        case SET_NICKNAME -> nickname = new String(message.getPayload());
+                        case JOIN_CREATE_ROOM -> roomName = new String(message.getPayload());
+                    }
+                } catch (SocketException e) {
+                    log.error(e);
+                    return;
                 }
             }
 
