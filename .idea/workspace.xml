@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Fixed disconnecting a little.">
-      <change afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/utilities/Alerts.java" afterDir="false" />
+    <list default="true" id="524d0c95-597c-41df-8d16-24874e0f41ad" name="Changes" comment="Added a stub of a callback system.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/gui/MultiDrawApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-client/src/main/java/wit/pap/multidraw/client/utils/TCPHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/MultiDrawServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-server/src/main/java/wit/pap/multidraw/server/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/multidraw-shared/src/main/java/wit/pap/multidraw/shared/globals/Globals.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +148,7 @@
       <workItem from="1718615516154" duration="10275000" />
       <workItem from="1718645733123" duration="16436000" />
       <workItem from="1718665705329" duration="903000" />
-      <workItem from="1718697473728" duration="39972000" />
+      <workItem from="1718697473728" duration="43725000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -527,7 +526,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718753663982</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Added a stub of a callback system.">
+      <option name="closed" value="true" />
+      <created>1718754973028</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1718754973028</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -545,7 +552,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finished project structure overhaul." />
     <MESSAGE value="Deleted faulty test files." />
     <MESSAGE value="Revamped communications between the client and the server." />
     <MESSAGE value="Client can now disconnect." />
@@ -570,7 +576,8 @@
     <MESSAGE value="Added image synchronization logic on the server, as well as improved messaging." />
     <MESSAGE value="Tried to make termination more &quot;polite&quot; with proper closings." />
     <MESSAGE value="Fixed disconnecting a little." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed disconnecting a little." />
+    <MESSAGE value="Added a stub of a callback system." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a stub of a callback system." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

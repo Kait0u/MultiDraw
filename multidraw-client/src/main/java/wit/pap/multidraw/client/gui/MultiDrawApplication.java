@@ -7,11 +7,14 @@ import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.SnapshotResult;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -22,11 +25,13 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
 
+import javafx.util.Callback;
 import javafx.util.Duration;
 import wit.pap.multidraw.client.gui.utilities.Alerts;
 import wit.pap.multidraw.client.gui.widgets.LayeredImageStack;
 import wit.pap.multidraw.client.gui.widgets.PannableScrollPane;
 import wit.pap.multidraw.client.utils.TCPHandler;
+import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.communication.ClientCommands;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.globals.Globals;
@@ -182,6 +187,10 @@ public class MultiDrawApplication extends Application {
             btnConnectDisconnect.setText("Disconnect");
             btnConnectDisconnect.setOnAction(e -> disconnect());
 
+            reset();
+            clearCanvas();
+
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -201,6 +210,8 @@ public class MultiDrawApplication extends Application {
                 () -> Alerts.showInfoAlert("The following has occurred:", s)
             )
         );
+        tcpHandler.setCbGetCanvasImage(() -> Platform.runLater(this::snapshotCanvas));
+        tcpHandler.setCbSetMiddleGround(im -> Platform.runLater(() -> imageStack.setMgImage(im)));
     }
 
     private void disconnect() {
@@ -220,6 +231,21 @@ public class MultiDrawApplication extends Application {
                 }));
 
         timeline.play();
+    }
+
+    public void snapshotCanvas() {
+        if (canvas == null) return;
+
+        WritableImage img = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        SnapshotParameters snapshotParameters = new SnapshotParameters();
+        snapshotParameters.setFill(Color.TRANSPARENT);
+        final TCPHandler finalTcpHandler = tcpHandler;
+
+        canvas.snapshot(snapshotResult -> {
+            BgraImage image = BgraImage.fromFXImage(snapshotResult.getImage());
+            finalTcpHandler.setImage(image);
+            return null;
+        }, snapshotParameters, img);
     }
 
     // ---------

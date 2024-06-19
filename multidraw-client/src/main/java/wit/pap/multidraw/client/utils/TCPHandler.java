@@ -1,22 +1,24 @@
 package wit.pap.multidraw.client.utils;
 
 import wit.pap.multidraw.shared.BgraImage;
+import wit.pap.multidraw.shared.Utilities;
 import wit.pap.multidraw.shared.communication.ClientCommands;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.Message;
 import wit.pap.multidraw.shared.communication.ServerMessage;
+import wit.pap.multidraw.shared.globals.Globals;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class TCPHandler extends Thread {
     private Socket socket;
@@ -27,12 +29,14 @@ public class TCPHandler extends Thread {
     private final Queue<ServerMessage> messagesToHandle;
     private final AtomicBoolean running;
 
+    private Runnable cbGetCanvasImage = null;
     private Consumer<BgraImage> cbSetMiddleGround = null;
     private Consumer<String> cbShowMessage = null;
     private Consumer<String> cbShowError = null;
     private Runnable cbOnClose = null;
 
     private Instant lastImageSync;
+    private BgraImage image;
 
     public TCPHandler(String serverAddress, int serverPort) throws IOException {
         this(InetAddress.getByName(serverAddress), serverPort);
@@ -48,19 +52,20 @@ public class TCPHandler extends Thread {
         this.messagesToSend = new ConcurrentLinkedQueue<>();
         this.messagesToHandle = new ConcurrentLinkedQueue<>();
         this.running = new AtomicBoolean(false);
+
         this.lastImageSync = Instant.now();
+        this.image = BgraImage.createTransparent(Globals.IMAGE_WIDTH, Globals.IMAGE_HEIGHT);
     }
 
     @Override
     public void run() {
-        System.out.println("TCPHandler started!");
         this.running.set(true);
         try {
             while (this.running.get()) {
                 sendMessages();
                 receiveMessages();
                 handleMessages();
-
+                prepareCanvasImage();
             }
         } catch (Exception e) {
             if (cbShowError != null) cbShowError.accept(e.getMessage());
@@ -147,7 +152,6 @@ public class TCPHandler extends Thread {
             message = receiveMessage();
 
             if (message != null) {
-                System.out.println(message);
                 synchronized (messagesToHandle) {
                     messagesToHandle.offer(message);
                 }
@@ -158,14 +162,12 @@ public class TCPHandler extends Thread {
 
     private void handleMessage(ServerMessage message) {
         switch (message.getServerCommand()) {
-            case ACCEPT_INT0_ROOM -> {
-                System.out.println("Yay!");
-            }
+            case ACCEPT_INT0_ROOM -> {}
             case REJECT_FROM_ROOM -> {
                 handleRejectFromRoom(message);
             }
             case SEND_MIDDLEGROUND -> {
-
+                handleSendMiddleGround(message);
             }
         }
     }
@@ -177,6 +179,31 @@ public class TCPHandler extends Thread {
                 handleMessage(message);
             }
         }
+    }
+
+    private void prepareCanvasImage() {
+        if (cbGetCanvasImage == null)
+            return;
+
+        if (Duration.between(lastImageSync, Instant.now()).toSeconds() < Globals.CANVAS_SNAPSHOT_INTERVAL_SECONDS)
+            return;
+
+        cbGetCanvasImage.run();
+        synchronized (image) {
+            try {
+                byte[] imgBytes = Utilities.serializeIntoBytes(image);
+                ClientMessage imgMessage = new ClientMessage(
+                        ClientCommands.SEND_IMAGE,
+                        imgBytes
+                );
+
+                queueMessage(imgMessage);
+                lastImageSync = Instant.now();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     public synchronized void stopHandler() {
@@ -223,6 +250,20 @@ public class TCPHandler extends Thread {
         }
     }
 
+    private void handleSendMiddleGround(ServerMessage message) {
+        byte[] imgBytes = message.getPayload();
+        try {
+            BgraImage img = (BgraImage) Utilities.deserializeIntoObject(imgBytes);
+            if (cbSetMiddleGround != null) {
+                cbSetMiddleGround.accept(img);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Getters & Setters
 
 
@@ -240,5 +281,15 @@ public class TCPHandler extends Thread {
 
     public void setCbOnClose(Runnable cbOnClose) {
         this.cbOnClose = cbOnClose;
+    }
+
+    public void setCbGetCanvasImage(Runnable cbGetCanvasImage) {
+        this.cbGetCanvasImage = cbGetCanvasImage;
+    }
+
+    public void setImage(BgraImage image) {
+        synchronized (this.image) {
+            this.image = image;
+        }
     }
 }

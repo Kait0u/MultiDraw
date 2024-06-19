@@ -173,6 +173,7 @@ public class Room implements Runnable {
             log.info(new StringBuilder("Room \"").append(name).append("\" has no users to receive messages from!"));
             return;
         }
+
         Set<ClientMessage> toAdd = new HashSet<>();
         Map<ClientMessage, User> senders = new HashMap<>();
         synchronized (users) {
@@ -210,13 +211,20 @@ public class Room implements Runnable {
         synchronized (userImages) {
             synchronized (users) {
                 for (User destinationUser: users) {
-                    List<BgraImage> sourceImages = userImages.entrySet()
+                    List<BgraImage> sourceImagesTemp = userImages.entrySet()
                             .stream()
                             .filter(pair -> pair.getKey() != destinationUser)
                             .map(Map.Entry::getValue)
                             .filter(Objects::nonNull)
                             .toList()
                             .reversed();
+
+                    List<BgraImage> sourceImages = new ArrayList<>(List.of(BgraImage.createTransparent(
+                            Globals.IMAGE_WIDTH,
+                            Globals.IMAGE_HEIGHT
+                    )));
+                    sourceImages.addAll(sourceImagesTemp);
+
                     BgraImage[] sourceImagesArr = sourceImages.toArray(new BgraImage[0]);
                     BgraImage middleGround = BgraImage.overlayAll(sourceImagesArr);
                     middleGrounds.put(destinationUser, middleGround);
@@ -245,6 +253,7 @@ public class Room implements Runnable {
             }
         }
 
+        lastImageMerge = Instant.now();
         log.info(new StringBuilder("Room \"").append(name).append("\" prepared middlegrounds for sending."));
     }
 
@@ -268,7 +277,6 @@ public class Room implements Runnable {
         }
 
         log.info(new StringBuilder("Room \"").append(name).append("\": sending complete!"));
-        lastImageMerge = Instant.now();
     }
 
     private void handleMessage(User sender, ClientMessage message) {
