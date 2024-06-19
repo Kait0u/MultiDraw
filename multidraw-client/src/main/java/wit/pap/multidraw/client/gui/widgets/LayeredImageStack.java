@@ -1,13 +1,25 @@
 package wit.pap.multidraw.client.gui.widgets;
 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import wit.pap.multidraw.client.gui.utilities.Alerts;
 import wit.pap.multidraw.shared.globals.Globals;
 import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.LayeredImage;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class LayeredImageStack extends StackPane {
     private LayeredImage layeredImage;
@@ -64,6 +76,34 @@ public class LayeredImageStack extends StackPane {
         if (mgImage != null) {
             mgImageView.setImage(mgImage);
         }
+    }
+
+    public void saveAsPNG(File outFile) {
+        if (fgCanvas == null || layeredImage == null)
+            return;
+
+        WritableImage writableImage = new WritableImage(Globals.IMAGE_WIDTH, Globals.IMAGE_HEIGHT);
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        fgCanvas.snapshot(params, writableImage);
+
+        BgraImage bg = getLayeredImage().getBackground(),
+                mg = getLayeredImage().getMiddleground(),
+                fg = BgraImage.fromFXImage(writableImage);
+        BgraImage result = BgraImage.overlayAll(bg, mg, fg);
+
+        if (result != null) {
+            BufferedImage bi = SwingFXUtils.fromFXImage(result.toWritableImage(), null);
+
+            try {
+                ImageIO.write(bi, "png", outFile);
+            } catch (IOException e) {
+                Alerts.showErrorAlert(e.toString(), e.getMessage());
+            }
+        }
+
+
     }
 
     // Getter for the canvas to allow external manipulation if necessary

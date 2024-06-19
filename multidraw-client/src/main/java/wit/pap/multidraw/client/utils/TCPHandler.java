@@ -27,7 +27,9 @@ public class TCPHandler extends Thread {
 
     private final Queue<ClientMessage> messagesToSend;
     private final Queue<ServerMessage> messagesToHandle;
+    private final AtomicBoolean isConnectionDead;
     private final AtomicBoolean running;
+
 
     private Runnable cbGetCanvasImage = null;
     private Consumer<BgraImage> cbSetMiddleGround = null;
@@ -43,11 +45,24 @@ public class TCPHandler extends Thread {
     }
 
     public TCPHandler(InetAddress serverAddress, int serverPort) throws IOException {
-        this.socket = new Socket(serverAddress, serverPort);
-        this.socket.setSoTimeout(400);
-        this.outputStream = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        this.outputStream.flush();
-        this.inputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+        this.isConnectionDead = new AtomicBoolean(false);
+
+        ObjectOutputStream tempOut = null;
+        ObjectInputStream tempIn = null;
+
+        try {
+            this.socket = new Socket(serverAddress, serverPort);
+            this.socket.setSoTimeout(400);
+            tempOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            tempOut.flush();
+            tempIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+        } catch (SocketException ex) {
+            markConnectionAsDead();
+            cbShowError.accept(ex.getMessage());
+        }
+
+        this.inputStream = tempIn;
+        this.outputStream = tempOut;
 
         this.messagesToSend = new ConcurrentLinkedQueue<>();
         this.messagesToHandle = new ConcurrentLinkedQueue<>();
@@ -66,11 +81,22 @@ public class TCPHandler extends Thread {
                 receiveMessages();
                 handleMessages();
                 prepareCanvasImage();
+
+                stopIfDead();
             }
         } catch (Exception e) {
+            markConnectionAsDead();
             if (cbShowError != null) cbShowError.accept(e.getMessage());
         }
 
+    }
+
+    private void stopIfDead() {
+        synchronized (isConnectionDead) {
+            if (isConnectionDead.get()) {
+                running.set(false);
+            }
+        }
     }
 
     public synchronized void queueMessage(ClientMessage message) {
@@ -85,6 +111,11 @@ public class TCPHandler extends Thread {
     }
 
     private void sendMessage(Message message) throws IOException {
+        synchronized (isConnectionDead) {
+            if (isConnectionDead.get())
+                return;
+        }
+
         synchronized (outputStream) {
             try {
                 outputStream.writeObject(message);
@@ -98,50 +129,41 @@ public class TCPHandler extends Thread {
     }
 
     private synchronized void sendMessages() {
-        if (messagesToSend.isEmpty()) return;
+        synchronized (messagesToSend) {
+            if (messagesToSend.isEmpty()) return;
 
-        while (!messagesToSend.isEmpty()) {
-            Message msg = messagesToSend.poll();
-            try {
-                sendMessage(msg);
-            } catch (IOException e) {
-                if (cbShowError != null) cbShowError.accept(e.getMessage());
+            while (!messagesToSend.isEmpty()) {
+                Message msg = messagesToSend.poll();
+                try {
+                    sendMessage(msg);
+                } catch (IOException e) {
+                    if (cbShowError != null) cbShowError.accept(e.getMessage());
+                }
             }
         }
     }
 
     public ServerMessage receiveMessage() {
-        if (this.inputStream != null) {
+        synchronized (isConnectionDead) {
+            if (isConnectionDead.get())
+                return null;
+        }
+
+        synchronized (inputStream) {
             try {
                 return (ServerMessage) this.inputStream.readObject();
             } catch (SocketException e) {
                 this.running.set(false);
                 if (cbShowMessage != null) cbShowMessage.accept(e.getMessage());
-            } catch (SocketTimeoutException e) {
+            } catch (SocketTimeoutException ignored) {
 
             } catch (IOException | ClassNotFoundException e) {
+                markConnectionAsDead();
                 if (cbShowError != null) cbShowError.accept(e.getMessage());
             }
         }
 
         return null;
-    }
-
-    public ServerMessage receiveMessageOrNull() {
-        if (this.inputStream == null)
-            return null;
-
-        synchronized (inputStream) {
-            try {
-                if (inputStream.available() <= 0)
-                    return null;
-                else
-                    return (ServerMessage) inputStream.readObject();
-
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     private void receiveMessages() {
@@ -163,12 +185,9 @@ public class TCPHandler extends Thread {
     private void handleMessage(ServerMessage message) {
         switch (message.getServerCommand()) {
             case ACCEPT_INT0_ROOM -> {}
-            case REJECT_FROM_ROOM -> {
-                handleRejectFromRoom(message);
-            }
-            case SEND_MIDDLEGROUND -> {
-                handleSendMiddleGround(message);
-            }
+            case REJECT_FROM_ROOM -> handleRejectFromRoom(message);
+            case SEND_MIDDLEGROUND -> handleSendMiddleGround(message);
+            case SEND_USERS -> {}
         }
     }
 
@@ -182,6 +201,11 @@ public class TCPHandler extends Thread {
     }
 
     private void prepareCanvasImage() {
+        synchronized (isConnectionDead) {
+            if (isConnectionDead.get())
+                return;
+        }
+
         if (cbGetCanvasImage == null)
             return;
 
@@ -207,9 +231,18 @@ public class TCPHandler extends Thread {
     }
 
     public synchronized void stopHandler() {
+        markConnectionAsDead();
         try {
             this.running.set(false);
             close();
+        } catch (Exception e) {
+
+        }
+    }
+
+    public synchronized void stopHandlerInterrupt() {
+        try {
+            stopHandler();
             interrupt();
         } catch (Exception e) {
 
@@ -257,10 +290,8 @@ public class TCPHandler extends Thread {
             if (cbSetMiddleGround != null) {
                 cbSetMiddleGround.accept(img);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            markConnectionAsDead();
         }
     }
 
@@ -290,6 +321,18 @@ public class TCPHandler extends Thread {
     public void setImage(BgraImage image) {
         synchronized (this.image) {
             this.image = image;
+        }
+    }
+
+    public boolean getIsConnectionDead() {
+        synchronized (isConnectionDead) {
+            return isConnectionDead.get();
+        }
+    }
+
+    public void markConnectionAsDead() {
+        synchronized (isConnectionDead) {
+            isConnectionDead.set(true);
         }
     }
 }
