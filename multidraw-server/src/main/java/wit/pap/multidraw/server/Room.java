@@ -2,7 +2,6 @@ package wit.pap.multidraw.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.jmx.Server;
 import wit.pap.multidraw.shared.BgraImage;
 import wit.pap.multidraw.shared.Utilities;
 import wit.pap.multidraw.shared.communication.ClientMessage;
@@ -155,7 +154,7 @@ public class Room implements Runnable {
             Iterator<User> uIt = users.iterator();
             while (uIt.hasNext()) {
                 User u = uIt.next();
-                boolean shouldDelete = u.isDead();
+                boolean shouldDelete = u.getIsDead();
 
                 if (!shouldDelete) {
                     try {
@@ -213,13 +212,13 @@ public class Room implements Runnable {
         if (Duration.between(lastImageMerge, Instant.now()).toSeconds() < Globals.MIDDLEGROUND_CREATION_INTERVAL_SECONDS)
             return;
 
+        Map<User, BgraImage> middleGrounds = new HashMap<>();
+
         synchronized (users){
             if (users.isEmpty()) {
                 log.info(new StringBuilder("Room \"").append(name).append("\" has no users to prepare middleGrounds for!"));
                 return;
             }
-
-            Map<User, BgraImage> middleGrounds = new HashMap<>();
 
             synchronized (userImages) {
                 for (User destinationUser: users) {
@@ -231,11 +230,18 @@ public class Room implements Runnable {
                             .toList()
                             .reversed();
 
-                    List<BgraImage> sourceImages = new ArrayList<>(List.of(BgraImage.createTransparent(
-                            Globals.IMAGE_WIDTH,
-                            Globals.IMAGE_HEIGHT
-                    )));
-                    sourceImages.addAll(sourceImagesTemp);
+
+                    List<BgraImage> sourceImages = null;
+
+                    if (!sourceImagesTemp.isEmpty()) {
+                        sourceImages = sourceImagesTemp;
+                    } else {
+                        sourceImages = new ArrayList<>(List.of(BgraImage.createTransparent(
+                                Globals.IMAGE_WIDTH,
+                                Globals.IMAGE_HEIGHT
+                        )));
+                        sourceImages.addAll(sourceImagesTemp);
+                    }
 
                     BgraImage[] sourceImagesArr = sourceImages.toArray(new BgraImage[0]);
                     BgraImage middleGround = BgraImage.overlayAll(sourceImagesArr);
@@ -243,7 +249,6 @@ public class Room implements Runnable {
                 }
             }
         }
-
 
         log.info(new StringBuilder("Room \"").append(name).append("\" merged images into middlegrounds"));
 
@@ -253,7 +258,6 @@ public class Room implements Runnable {
                     User user = pair.getKey();
                     BgraImage mgImage = pair.getValue();
 
-
                     try {
                         byte[] mgImageBytes = Utilities.serializeAndCompress(mgImage);
                         ServerMessage message = new ServerMessage(ServerCommands.SEND_MIDDLEGROUND, mgImageBytes);
@@ -261,6 +265,7 @@ public class Room implements Runnable {
                         messageRecipients.put(message, user);
                     } catch (IOException e) {
                         log.error(e);
+                        user.markAsDead();
                     }
                 }
             }

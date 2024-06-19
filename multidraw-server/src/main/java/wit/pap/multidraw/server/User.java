@@ -2,7 +2,6 @@ package wit.pap.multidraw.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import wit.pap.multidraw.shared.communication.ClientCommands;
 import wit.pap.multidraw.shared.communication.ClientMessage;
 import wit.pap.multidraw.shared.communication.ServerCommands;
 import wit.pap.multidraw.shared.communication.ServerMessage;
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class User {
     private static final Logger log = LogManager.getLogger(User.class.getName());
-    private Socket socket;
+    private final Socket socket;
     private String nickname;
     private Room room;
 
@@ -33,13 +32,20 @@ public class User {
         this.nickname = nickname;
         this.isDead = new AtomicBoolean(false);
 
+        ObjectInputStream tempIn = null;
+        ObjectOutputStream tempOut = null;
+
         try {
-            out = new ObjectOutputStream(new BufferedOutputStream(this.socket.getOutputStream()));
-            out.flush();
-            in = new ObjectInputStream(new BufferedInputStream(this.socket.getInputStream()));
+            tempOut = new ObjectOutputStream(new BufferedOutputStream(this.socket.getOutputStream()));
+            tempOut.flush();
+            tempIn = new ObjectInputStream(new BufferedInputStream(this.socket.getInputStream()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error(e);
+            markAsDead();
         }
+
+        in = tempIn;
+        out = tempOut;
 
         if (room != null) {
             try {
@@ -51,6 +57,13 @@ public class User {
     }
 
     public ClientMessage receiveMessage() throws SocketException {
+        synchronized (isDead) {
+            if (isDead.get()) {
+                log.warn(new StringBuilder("User ").append(this).append(" is dead, ignoring message receive order."));
+                return null;
+            }
+        }
+
         try {
             synchronized (in) {
                 ClientMessage msg = (ClientMessage) in.readObject();
@@ -68,10 +81,15 @@ public class User {
     }
 
     public void sendMessage(ServerMessage message) throws SocketException {
-        if (message == null || out == null) return;
+        if (isDead.get()) {
+            log.warn(new StringBuilder("User ").append(this).append(" is dead, ignoring message send order."));
+            return;
+        }
 
         try {
             synchronized (out) {
+                if (message == null) return;
+
                 out.writeObject(message);
                 out.flush();
             }
@@ -83,9 +101,15 @@ public class User {
     }
 
     public void close() throws IOException {
-        if (out != null) out.close();
-        if (in != null) in.close();
-        if (socket != null) socket.close();
+        markAsDead();
+
+        synchronized (this) {
+            try {
+                if (out != null) out.close();
+                if (in != null) in.close();
+                if (socket != null) socket.close();
+            } catch (SocketException ignored) { }
+        }
     }
 
     @Override
@@ -99,14 +123,6 @@ public class User {
     }
 
     // Getters & Setters
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
 
     public String getNickname() {
         return nickname;
@@ -132,15 +148,27 @@ public class User {
                 sendMessage(new ServerMessage(ServerCommands.REJECT_FROM_ROOM, e.getMessage().getBytes()));
             } catch (SocketException ex) {
                 log.error(ex);
+                markAsDead();
             }
             throw e;
         } catch (IOException e) {
             log.error(e);
+            markAsDead();
         }
         this.room = room;
     }
 
-    public boolean isDead() {
-        return this.isDead.get();
+    public boolean getIsDead() {
+        synchronized (isDead) {
+            return this.isDead.get();
+        }
+    }
+
+    public void markAsDead() {
+        synchronized (isDead) {
+            isDead.set(true);
+        }
+
+        log.info(new StringBuilder(this.toString()).append(" has been marked as dead!"));
     }
 }
